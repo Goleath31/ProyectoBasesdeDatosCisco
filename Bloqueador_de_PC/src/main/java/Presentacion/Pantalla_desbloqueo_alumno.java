@@ -117,7 +117,7 @@ public class Pantalla_desbloqueo_alumno extends javax.swing.JPanel {
 
         lblEstadoActual.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblEstadoActual.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblEstadoActual.setText("Dsponible");
+        lblEstadoActual.setText("En uso");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
