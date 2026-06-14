@@ -43,7 +43,6 @@ public class Pantalla_desbloqueo_alumno extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(242, 245, 248));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         bginiciosesion.setLayout(new java.awt.GridBagLayout());
 
@@ -94,27 +93,51 @@ public class Pantalla_desbloqueo_alumno extends javax.swing.JPanel {
 
         panelContendedorestadoyalumno.setBackground(new java.awt.Color(210, 228, 255));
         panelContendedorestadoyalumno.setForeground(new java.awt.Color(0, 86, 150));
-        panelContendedorestadoyalumno.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelContendedorestadoyalumno.setLayout(new java.awt.GridBagLayout());
 
         lbltextoalumno.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
         lbltextoalumno.setForeground(new java.awt.Color(0, 86, 150));
         lbltextoalumno.setText("Alumno");
-        panelContendedorestadoyalumno.add(lbltextoalumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 110, 0, 0);
+        panelContendedorestadoyalumno.add(lbltextoalumno, gridBagConstraints);
 
         lblejecutando.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
         lblejecutando.setForeground(new java.awt.Color(0, 86, 150));
         lblejecutando.setText("Ejecutando");
-        panelContendedorestadoyalumno.add(lblejecutando, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        panelContendedorestadoyalumno.add(lblejecutando, gridBagConstraints);
 
         lblEstadoActual.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblEstadoActual.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblEstadoActual.setText("Dsponible");
-        panelContendedorestadoyalumno.add(lblEstadoActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 90, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 32;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 10, 6, 0);
+        panelContendedorestadoyalumno.add(lblEstadoActual, gridBagConstraints);
 
         lblNombredelAlumno.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblNombredelAlumno.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblNombredelAlumno.setText("Edgar Hiipolito");
-        panelContendedorestadoyalumno.add(lblNombredelAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 30, 130, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 46;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 21, 6, 9);
+        panelContendedorestadoyalumno.add(lblNombredelAlumno, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -133,22 +156,25 @@ public class Pantalla_desbloqueo_alumno extends javax.swing.JPanel {
         btnDesbloquear1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.ipadx = 196;
         gridBagConstraints.ipady = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 20, 10);
         bginiciosesion.add(btnDesbloquear1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.ipady = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 10);
-        jPanel1.add(bginiciosesion, gridBagConstraints);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bginiciosesion, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bginiciosesion, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -161,7 +187,7 @@ public class Pantalla_desbloqueo_alumno extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel bginiciosesion;
+    public javax.swing.JPanel bginiciosesion;
     private javax.swing.JButton btnDesbloquear1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEstadoActual;

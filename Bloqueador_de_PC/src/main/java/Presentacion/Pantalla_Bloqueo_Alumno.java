@@ -61,7 +61,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 90, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(30, 95, 0, 0);
         bginiciosesion.add(lblequipo, gridBagConstraints);
 
         lbl_numerodequipo.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -71,7 +71,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 2, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(30, 2, 0, 0);
         bginiciosesion.add(lbl_numerodequipo, gridBagConstraints);
 
         lblubicacion_centro_computo.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
@@ -85,7 +85,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.ipadx = 67;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(8, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(8, 35, 0, 0);
         bginiciosesion.add(lblubicacion_centro_computo, gridBagConstraints);
 
         lblip.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
@@ -130,7 +130,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.ipadx = 9;
         gridBagConstraints.ipady = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 20, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(9, 25, 0, 10);
         bginiciosesion.add(panelContendedorestadoyalumno, gridBagConstraints);
 
         lbltextocontraseña.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
@@ -141,7 +141,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 0);
         bginiciosesion.add(lbltextocontraseña, gridBagConstraints);
 
         txtinnsertarContraseña.setBackground(new java.awt.Color(240, 241, 241));
@@ -160,7 +160,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.ipadx = 196;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 20, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(7, 25, 0, 10);
         bginiciosesion.add(txtinnsertarContraseña, gridBagConstraints);
 
         lblTextoVerificacion.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
@@ -172,7 +172,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 0);
         bginiciosesion.add(lblTextoVerificacion, gridBagConstraints);
 
         lblTiempoRegresivo.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
@@ -197,7 +197,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.ipadx = 196;
         gridBagConstraints.ipady = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 20, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 20, 10);
         bginiciosesion.add(btnDesbloquear1, gridBagConstraints);
 
         btnDesbloquear2.setBackground(new java.awt.Color(0, 72, 128));
@@ -211,7 +211,7 @@ public class Pantalla_Bloqueo_Alumno extends javax.swing.JPanel {
         gridBagConstraints.ipadx = 157;
         gridBagConstraints.ipady = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 20, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(11, 25, 0, 10);
         bginiciosesion.add(btnDesbloquear2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
