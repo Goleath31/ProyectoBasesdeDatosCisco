@@ -1,4 +1,10 @@
-C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Bloqueador_de_PC\src\main\java\cisco\bloqueador_de_pc\Bloqueador_de_PC.java
-C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Bloqueador_de_PC\src\main\java\Presentacion\Pantalla_Bloqueo_Alumno.java
-C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Bloqueador_de_PC\src\main\java\Presentacion\Pantalla_desbloqueo_alumno.java
-C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Bloqueador_de_PC\src\main\java\Presentacion\PantallaBloqueoPrincipal.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/Presentacion/PantallaBloqueoPrincipal.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/Presentacion/Pantalla_Bloqueo_Alumno.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/Presentacion/Pantalla_desbloqueo_alumno.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/cisco/bloqueador_de_pc/Bloqueador_de_PC.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/entidad/AlumnoEntidad.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/persistencia/AlumnoDAO.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/persistencia/ConexionBD.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/persistencia/IAlumnoDAO.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/persistencia/IConexionBD.java
+/Users/rafaelgb/Downloads/ProyectoBasesdeDatosCisco-main/Bloqueador_de_PC/src/main/java/persistencia/PersistenciaException.java

@@ -126,7 +126,7 @@ public class PantallaBloqueoPrincipal extends javax.swing.JFrame {
 
         lblEstadoActual.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblEstadoActual.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblEstadoActual.setText("Dsponible");
+        lblEstadoActual.setText("Disponible");
         panelcontenedorestadoyalumno.add(lblEstadoActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 90, -1));
 
         lblTipodeReserva.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
