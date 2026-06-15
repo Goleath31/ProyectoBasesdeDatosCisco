@@ -4,17 +4,25 @@
  */
 package Presentacion;
 
+import Negocio.NegocioException;
+import dtos.BloqueoEquipoDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author golea
  */
 public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Confirmacion_Bloqueo_Equipos
-     */
-    public Confirmacion_Bloqueo_Equipos() {
+    private Administrador_Equipos ventanaPrincipal;
+    private javax.swing.JDialog dialogoContenedor;
+
+   
+    public Confirmacion_Bloqueo_Equipos(Administrador_Equipos principal, javax.swing.JDialog dialogo) {
+        this.ventanaPrincipal = principal;
+        this.dialogoContenedor = dialogo;
         initComponents();
+        txtNumeromaquina.setText("");
     }
 
     /**
@@ -26,7 +34,7 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        txtNumeromaquina = new javax.swing.JTextField();
         btnaplicarbloqueo = new javax.swing.JButton();
         btnaplicarbloqueo1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -35,11 +43,11 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
-        jTextField1.setText("jTextField1");
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(93, 95, 95), 2));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtNumeromaquina.setText("jTextField1");
+        txtNumeromaquina.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(93, 95, 95), 2));
+        txtNumeromaquina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtNumeromaquinaActionPerformed(evt);
             }
         });
 
@@ -47,6 +55,11 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
         btnaplicarbloqueo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo.setForeground(new java.awt.Color(255, 255, 255));
         btnaplicarbloqueo.setText("Confirmar Bloqueo");
+        btnaplicarbloqueo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueoActionPerformed(evt);
+            }
+        });
 
         btnaplicarbloqueo1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo1.setForeground(new java.awt.Color(93, 95, 95));
@@ -92,7 +105,7 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
+                            .addComponent(txtNumeromaquina)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))))
@@ -112,7 +125,7 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNumeromaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnaplicarbloqueo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -121,9 +134,46 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtNumeromaquinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeromaquinaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtNumeromaquinaActionPerformed
+
+    private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
+        String numeroMaquinaStr = txtNumeromaquina.getText().trim();
+
+        if (numeroMaquinaStr.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese el número de máquina.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            int numeroMaquina = Integer.parseInt(numeroMaquinaStr);
+
+            dtos.BloqueoEquipoDTO bloqueoDTO = new dtos.BloqueoEquipoDTO();
+            bloqueoDTO.setNumeroMaquina(numeroMaquina);
+            bloqueoDTO.setIdLaboratorioActual(ventanaPrincipal.getIdLaboratorioActual());
+
+            boolean exito = ventanaPrincipal.getComputadoraNegocio().bloquearEquipoPorNumero(bloqueoDTO);
+
+            if (exito) {
+                javax.swing.JOptionPane.showMessageDialog(this, "El equipo número " + numeroMaquina + " ha sido Bloqueado exitosamente.", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+                if (dialogoContenedor != null) {
+                    dialogoContenedor.dispose();
+                }
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El número de máquina debe ser un valor numérico.", "Error de Formato", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Negocio.NegocioException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Validación de Bloqueo", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnaplicarbloqueo1ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (dialogoContenedor != null) {
+            dialogoContenedor.dispose();
+        }
+    }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -134,6 +184,6 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtNumeromaquina;
     // End of variables declaration//GEN-END:variables
 }

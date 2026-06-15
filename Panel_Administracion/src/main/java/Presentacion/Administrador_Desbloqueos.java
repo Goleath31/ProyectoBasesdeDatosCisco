@@ -36,7 +36,6 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
         lbltitulo = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         lbllaboratorio = new javax.swing.JLabel();
-        lblip = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
         lbladmin = new javax.swing.JLabel();
         jpanelcontenido = new javax.swing.JPanel();
@@ -103,9 +102,8 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(panelcontnedoropcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnequipos, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                    .addGroup(panelcontnedoropcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lbldesbloqueos, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                        .addComponent(btnbloqueos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(lbldesbloqueos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(btnbloqueos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(8, Short.MAX_VALUE))
         );
         panelcontnedoropcionesLayout.setVerticalGroup(
@@ -155,11 +153,6 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
         lbllaboratorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lbllaboratorio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        lblip.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
-        lblip.setForeground(new java.awt.Color(0, 86, 150));
-        lblip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblip.setText("Ip");
-
         lblusuario.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblusuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblusuario.setText("Usuario");
@@ -181,9 +174,7 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbllaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblip, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lbllaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,15 +188,12 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
                 .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegresar))
+                        .addComponent(btnRegresar)
+                        .addComponent(lbllaboratorio))
                     .addGroup(panelsuperiorLayout.createSequentialGroup()
-                        .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbllaboratorio)
-                            .addComponent(lblusuario))
+                        .addComponent(lblusuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbladmin)
-                            .addComponent(lblip))))
+                        .addComponent(lbladmin)))
                 .addContainerGap())
         );
 
@@ -541,7 +529,6 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
     private javax.swing.JLabel lbldesbloqueos;
     private javax.swing.JLabel lblidalumno;
     private javax.swing.JLabel lblinstrucciones;
-    private javax.swing.JLabel lblip;
     private javax.swing.JLabel lbllaboratorio;
     private javax.swing.JLabel lblmotivos;
     private javax.swing.JLabel lblnumerodebloqueos;

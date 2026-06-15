@@ -4,19 +4,38 @@
  */
 package Presentacion;
 
+import Negocio.IAlumnoNegocio;
+import dtos.BloqueoAlumnoDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author golea
  */
+
 public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
+
+    private IAlumnoNegocio alumnoNegocio;
+    private int idAlumno;
+    private String motivo;
+    private javax.swing.JDialog dialogPadre;
 
     /**
      * Creates new form Confirmacion_bloqueo_alumno
      */
-    public Confirmacion_bloqueo_alumno() {
+    public Confirmacion_bloqueo_alumno(IAlumnoNegocio negocio, int idAlumno, String nombreAlumno, String motivo) {
         initComponents();
+        this.alumnoNegocio = negocio;
+        this.idAlumno = idAlumno;
+        this.motivo = motivo;
+
+        String mensaje = "¿Está seguro de que desea aplicar un bloqueo al alumno " + nombreAlumno 
+                       + " por el motivo: " + motivo + "?\n\n" 
+                       + "El estudiante no podrá utilizar ningún equipo de laboratorio hasta que el bloqueo sea removido.";
+        jTextArea1.setText(mensaje);
     }
 
+    public void setDialogPadre(javax.swing.JDialog dialog) { this.dialogPadre = dialog; }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,27 +46,25 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btnaplicarbloqueo = new javax.swing.JButton();
         btnaplicarbloqueo1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jComboBox1 = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Confirmar bloqueo de Equipo");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(93, 95, 95));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Motivo ");
-
         btnaplicarbloqueo.setBackground(new java.awt.Color(255, 51, 51));
         btnaplicarbloqueo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo.setForeground(new java.awt.Color(255, 255, 255));
         btnaplicarbloqueo.setText("Confirmar Bloqueo");
+        btnaplicarbloqueo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueoActionPerformed(evt);
+            }
+        });
 
         btnaplicarbloqueo1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo1.setForeground(new java.awt.Color(93, 95, 95));
@@ -59,8 +76,6 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -68,20 +83,16 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnaplicarbloqueo1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnaplicarbloqueo))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addComponent(btnaplicarbloqueo)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,26 +103,35 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
-                .addGap(19, 19, 19)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnaplicarbloqueo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnaplicarbloqueo1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
+        // TODO add your handling code here:
+        try {
+            BloqueoAlumnoDTO dto = new BloqueoAlumnoDTO(this.idAlumno, this.motivo);
+            alumnoNegocio.bloquearAlumno(dto);
+            JOptionPane.showMessageDialog(this, "Alumno bloqueado correctamente.");
+            if (dialogPadre != null) {
+                dialogPadre.dispose(); 
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    
+    }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnaplicarbloqueo;
     private javax.swing.JButton btnaplicarbloqueo1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea jTextArea1;

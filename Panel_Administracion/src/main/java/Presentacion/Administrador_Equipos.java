@@ -4,17 +4,210 @@
  */
 package Presentacion;
 
+import Negocio.ComputadoraNegocio;
+import Negocio.IComputadoraNegocio;
+import Negocio.NegocioException;
+import Persistencia.ComputadoraDAO;
+import Persistencia.ConexionBD;
+import Persistencia.IComputadoraDAO;
+import Persistencia.IConexionBD;
+import dtos.ComputadoraTablaDTO;
+import java.net.InetAddress;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author golea
  */
 public class Administrador_Equipos extends javax.swing.JFrame {
 
+    private final IComputadoraNegocio computadoraNegocio;
+    private int idLaboratorioActual = 0;
+    private int paginaActual = 1;
+    private final int REGISTROS_POR_PAGINA = 5;
+    private int totalPaginas = 1;
+
     /**
      * Creates new form Administrador_Equipos
      */
     public Administrador_Equipos() {
         initComponents();
+        if (tabladeequipos != null) {
+            javax.swing.table.DefaultTableModel modeloCuatroColumnas = new javax.swing.table.DefaultTableModel(
+                    new Object[][]{},
+                    new String[]{"ID Equipo", "Dirección IP", "Número Máquina", "Estado"}
+            ) {
+                // Hacemos que las celdas no sean editables manualmente al dar doble clic
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return false;
+                }
+            };
+            tabladeequipos.setModel(modeloCuatroColumnas);
+        }
+        IConexionBD conexionBD = new ConexionBD(); // Reemplaza por tu clase real instalada en el proyecto
+        IComputadoraDAO computadoraDAO = new ComputadoraDAO(conexionBD);
+        this.computadoraNegocio = new ComputadoraNegocio(computadoraDAO);
+
+        // Auto-detección inicial libre de lógica SQL directa en la UI
+        this.inicializarPanelAdministrador();
+
+    }
+
+    private void inicializarPanelAdministrador() {
+        try {
+            // 1. Obtener la IP local del Sistema Operativo
+            String ipLocal = InetAddress.getLocalHost().getHostAddress();
+            System.out.println("IP detectada de la máquina: " + ipLocal);
+            ipLocal = "192.168.2.3";
+
+            // 2. Consultar a tu capa de negocio la información del laboratorio
+            ComputadoraTablaDTO labInfo = computadoraNegocio.obtenerIdLaboratorioPorIP(ipLocal);
+
+            if (labInfo != null) {
+                this.idLaboratorioActual = labInfo.getIdComputadora(); // Recuperamos el ID
+                String nombreLaboratorio = labInfo.getEstatus();       // Recuperamos el Nombre
+
+                lbllaboratorionombre.setText(nombreLaboratorio);
+                txtcontraseña.setText(labInfo.getDireccionIp());
+
+            } else {
+                // SALVAVIDAS DESARROLLO: Si tu IP de Wi-Fi actual no está en el SQL, forzamos datos de prueba
+                System.out.println("La IP no está en la BD. Usando Laboratorio de Pruebas.");
+                this.idLaboratorioActual = 1;
+                lbllaboratorionombre.setText("Laboratorio de Cómputo 1");
+            }
+
+            // 3. Poblar elementos visuales de forma segura
+            this.cargarTablaComputadoras();
+            this.actualizarMetricasUso();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Error al establecer comunicación con el centro de cómputo: " + e.getMessage(),
+                    "Error de Carga",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Llena el JTable real asignado en tu archivo .form (tabladeequipos)
+     */
+    private void cargarTablaComputadoras() {
+        try {
+            if (tabladeequipos == null) {
+                return;
+            }
+
+            DefaultTableModel modeloTabla = (DefaultTableModel) tabladeequipos.getModel();
+            modeloTabla.setRowCount(0); // Limpiar filas anteriores
+
+            // Consumir tu capa de negocio
+            List<ComputadoraTablaDTO> listaEquipos = computadoraNegocio.obtenerComputadorasPorLaboratorio(idLaboratorioActual);
+
+            if (listaEquipos != null) {
+                for (ComputadoraTablaDTO dto : listaEquipos) {
+                    Object[] fila = new Object[]{
+                        dto.getIdComputadora(),
+                        dto.getDireccionIp(),
+                        dto.getNumeroMaquina(),
+                        dto.getEstatus()
+                    };
+                    modeloTabla.addRow(fila);
+                }
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, "Error de Datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Actualiza los marcadores numéricos de la interfaz utilizando tu capa de
+     * negocio
+     */
+    /**
+     * Actualiza las estadísticas, contadores y porcentaje de uso en la interfaz
+     * gráfica
+     */
+    private void actualizarMetricasUso() {
+        try {
+            // 1. Mostrar las computadoras que están actualmente en uso
+            if (lblnumeroenuso != null) {
+                int enUso = computadoraNegocio.obtenerContadorEquiposEnUso(idLaboratorioActual);
+                lblnumeroenuso.setText(String.valueOf(enUso));
+            }
+
+            // 2. Mostrar el total de computadoras pertenecientes al laboratorio
+            if (jLabel8lblnumeroequipostotales != null) {
+                int totales = computadoraNegocio.obtenerTotalEquiposLaboratorio(idLaboratorioActual);
+                jLabel8lblnumeroequipostotales.setText(String.valueOf(totales));
+            }
+
+            // 3. Mostrar el porcentaje total de ocupación calculado por la capa de negocio
+            if (lblocupacionporcentage != null) {
+                String porcentajeTexto = computadoraNegocio.calcularPorcentajeOcupacion(idLaboratorioActual);
+                lblocupacionporcentage.setText(porcentajeTexto);
+            }
+
+        } catch (NegocioException e) {
+            System.err.println("No se pudieron refrescar los contadores y porcentajes en la interfaz: " + e.getMessage());
+        }
+    }
+
+    public int getIdLaboratorioActual() {
+        return this.idLaboratorioActual;
+    }
+
+    public Negocio.IComputadoraNegocio getComputadoraNegocio() {
+        return this.computadoraNegocio;
+    }
+
+    private void cargarTablaComputadorasPaginada() {
+        try {
+            if (tabladeequipos == null) {
+                return;
+            }
+
+            DefaultTableModel modeloTabla = (DefaultTableModel) tabladeequipos.getModel();
+            modeloTabla.setRowCount(0);
+
+            String criterio = tctbuscarequipo.getText();
+            String estatus = (cbxestados.getSelectedItem() != null) ? cbxestados.getSelectedItem().toString() : "Todos";
+
+            this.totalPaginas = computadoraNegocio.calcularTotalPaginas(idLaboratorioActual, criterio, estatus, REGISTROS_POR_PAGINA);
+
+            // Reajuste preventivo de la página actual
+            if (this.paginaActual > this.totalPaginas) {
+                this.paginaActual = this.totalPaginas;
+            }
+            if (this.paginaActual < 1) {
+                this.paginaActual = 1;
+            }
+
+            // 3. Escribir el texto dinámico en el label solicitado
+            lblcontadordepaginas.setText("Mostrando " + this.paginaActual + " de " + this.totalPaginas + " Paginas Equipos");
+
+            // 4. Solicitar datos parciales
+            List<ComputadoraTablaDTO> listaEquipos = computadoraNegocio.filtrarComputadorasPorLaboratorio(
+                    idLaboratorioActual, criterio, estatus, this.paginaActual, REGISTROS_POR_PAGINA);
+
+            if (listaEquipos != null) {
+                for (ComputadoraTablaDTO dto : listaEquipos) {
+                    Object[] fila = new Object[]{
+                        dto.getIdComputadora(),
+                        dto.getDireccionIp(),
+                        dto.getNumeroMaquina(),
+                        dto.getEstatus()
+                    };
+                    modeloTabla.addRow(fila);
+                }
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, "Error de actualización visual: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -36,7 +229,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         lbltitulo = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         lbllaboratorionombre = new javax.swing.JLabel();
-        lblip = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
         lbladmin = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -88,6 +280,11 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         btnBloqueos.setMaximumSize(new java.awt.Dimension(46, 14));
         btnBloqueos.setMinimumSize(new java.awt.Dimension(46, 14));
         btnBloqueos.setPreferredSize(new java.awt.Dimension(46, 14));
+        btnBloqueos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBloqueosActionPerformed(evt);
+            }
+        });
 
         BtnDesbloqueos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         BtnDesbloqueos.setForeground(new java.awt.Color(102, 102, 102));
@@ -159,6 +356,11 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         btnRegresar.setText("Regresar");
         btnRegresar.setBorder(null);
         btnRegresar.setContentAreaFilled(false);
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         lbllaboratorionombre.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
         lbllaboratorionombre.setForeground(new java.awt.Color(0, 86, 150));
@@ -166,11 +368,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         lbllaboratorionombre.setText("LAboratorio Nombre");
         lbllaboratorionombre.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lbllaboratorionombre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        lblip.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
-        lblip.setForeground(new java.awt.Color(0, 86, 150));
-        lblip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblip.setText("Ip");
 
         lblusuario.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblusuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -192,11 +389,9 @@ public class Administrador_Equipos extends javax.swing.JFrame {
                 .addComponent(lbltitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbllaboratorionombre, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblip, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
+                .addComponent(lbllaboratorionombre, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbladmin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -209,15 +404,12 @@ public class Administrador_Equipos extends javax.swing.JFrame {
                 .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegresar))
+                        .addComponent(btnRegresar)
+                        .addComponent(lbllaboratorionombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(contenedorsuperiorLayout.createSequentialGroup()
-                        .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbllaboratorionombre)
-                            .addComponent(lblusuario))
+                        .addComponent(lblusuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbladmin)
-                            .addComponent(lblip))))
+                        .addComponent(lbladmin)))
                 .addContainerGap())
         );
 
@@ -333,7 +525,7 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         lblestado.setText("Estados");
 
         cbxestados.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cbxestados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "En uso", "Bloqueado" }));
+        cbxestados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "En uso", "Bloqueado" }));
         cbxestados.setPreferredSize(new java.awt.Dimension(40, 15));
         cbxestados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -347,11 +539,15 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         lblbuscarequipo.setText("Buscar Equipo:");
 
         tctbuscarequipo.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
-        tctbuscarequipo.setText("jTextField1");
         tctbuscarequipo.setPreferredSize(new java.awt.Dimension(73, 15));
 
         btnfltrar.setText("Fltrar");
         btnfltrar.setPreferredSize(new java.awt.Dimension(73, 15));
+        btnfltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnfltrarActionPerformed(evt);
+            }
+        });
 
         btnrestaurartabla.setBackground(new java.awt.Color(0, 86, 150));
         btnrestaurartabla.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
@@ -367,11 +563,21 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         btnbloquearequipo.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
         btnbloquearequipo.setForeground(new java.awt.Color(255, 255, 255));
         btnbloquearequipo.setText("Bloquear Equipo");
+        btnbloquearequipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbloquearequipoActionPerformed(evt);
+            }
+        });
 
         btndesbloquearequipo.setBackground(new java.awt.Color(0, 150, 86));
         btndesbloquearequipo.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
         btndesbloquearequipo.setForeground(new java.awt.Color(255, 255, 255));
         btndesbloquearequipo.setText("Desbloquear Equipo");
+        btndesbloquearequipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndesbloquearequipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -385,32 +591,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         );
 
         tabladeequipos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        tabladeequipos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Equipo Id", "Direccion IP", "Ubicacion", "Estado", "Usuario"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jScrollPane1.setViewportView(tabladeequipos);
         if (tabladeequipos.getColumnModel().getColumnCount() > 0) {
             tabladeequipos.getColumnModel().getColumn(0).setResizable(false);
@@ -438,6 +618,11 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         txtcontraseña.setForeground(new java.awt.Color(0, 86, 150));
         txtcontraseña.setText("iTSON");
         txtcontraseña.setEnabled(false);
+        txtcontraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcontraseñaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelcontraseñamaestraLayout = new javax.swing.GroupLayout(panelcontraseñamaestra);
         panelcontraseñamaestra.setLayout(panelcontraseñamaestraLayout);
@@ -469,9 +654,18 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         lblcontadordepaginas.setText("Mostrando 1 de 45 Paginas Equipos");
 
         btnizquierda.setText("<");
+        btnizquierda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnizquierdaActionPerformed(evt);
+            }
+        });
 
         btnderecha.setText(">");
-        btnderecha.setActionCommand(">");
+        btnderecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnderechaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelcontenidoLayout = new javax.swing.GroupLayout(panelcontenido);
         panelcontenido.setLayout(panelcontenidoLayout);
@@ -500,43 +694,38 @@ public class Administrador_Equipos extends javax.swing.JFrame {
                     .addGroup(panelcontenidoLayout.createSequentialGroup()
                         .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblestado, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxestados, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(23, 23, 23)
+                            .addComponent(cbxestados, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblbuscarequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelcontenidoLayout.createSequentialGroup()
                                 .addComponent(tctbuscarequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnfltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btndesbloquearequipo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnbloquearequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnrestaurartabla)
-                        .addGap(18, 18, 18))))
+                                .addComponent(btnfltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(btndesbloquearequipo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnbloquearequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnrestaurartabla)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelcontenidoLayout.setVerticalGroup(
             panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelcontenidoLayout.createSequentialGroup()
-                .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelcontenidoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblestado, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblbuscarequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxestados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tctbuscarequipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnfltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelcontenidoLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnrestaurartabla)
-                            .addComponent(btnbloquearequipo)
-                            .addComponent(btndesbloquearequipo))))
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblestado, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblbuscarequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxestados, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tctbuscarequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnfltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btndesbloquearequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnbloquearequipo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnrestaurartabla, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(panelcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelcontenidoLayout.createSequentialGroup()
@@ -602,7 +791,94 @@ public class Administrador_Equipos extends javax.swing.JFrame {
 
     private void btnrestaurartablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrestaurartablaActionPerformed
         // TODO add your handling code here:
+        // 1. Limpiar el cuadro de texto de búsqueda
+        tctbuscarequipo.setText("");
+        cbxestados.setSelectedIndex(0);
+        this.paginaActual = 1;
+        this.cargarTablaComputadorasPaginada();
+        this.actualizarMetricasUso();
+
+
     }//GEN-LAST:event_btnrestaurartablaActionPerformed
+
+    private void btnbloquearequipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloquearequipoActionPerformed
+        // TODO add your handling code here:
+        javax.swing.JDialog dialogo = new javax.swing.JDialog(this, "Bloquear Equipo", true);
+
+        // Pasamos 'this' (el Administrador) y el diálogo para poder cerrarlo después
+        Confirmacion_Bloqueo_Equipos panelBloqueo = new Confirmacion_Bloqueo_Equipos(this, dialogo);
+
+        dialogo.getContentPane().add(panelBloqueo);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this); // Centrar en pantalla
+        dialogo.setVisible(true);
+
+    }//GEN-LAST:event_btnbloquearequipoActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void txtcontraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcontraseñaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcontraseñaActionPerformed
+
+    private void btnfltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfltrarActionPerformed
+        // TODO add your handling code here:
+        // 1. Obtener el texto del buscador de equipos
+        this.paginaActual = 1; // Obligatorio regresar a la uno al cambiar filtros
+        this.cargarTablaComputadorasPaginada();
+    }//GEN-LAST:event_btnfltrarActionPerformed
+
+    private void btnderechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnderechaActionPerformed
+        // TODO add your handling code here:
+        if (this.paginaActual < this.totalPaginas) {
+            this.paginaActual++;
+            this.cargarTablaComputadorasPaginada();
+        }
+    }//GEN-LAST:event_btnderechaActionPerformed
+
+    private void btnizquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnizquierdaActionPerformed
+        // TODO add your handling code here:
+        if (this.paginaActual > 1) {
+            this.paginaActual--;
+            this.cargarTablaComputadorasPaginada();
+        }
+    }//GEN-LAST:event_btnizquierdaActionPerformed
+
+    private void btndesbloquearequipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesbloquearequipoActionPerformed
+        // TODO add your handling code here:
+        javax.swing.JDialog dialogo = new javax.swing.JDialog(this, "Desbloquear Equipo", true);
+        Confirmacion_Desbloqueo_Equipo panelDesbloqueo = new Confirmacion_Desbloqueo_Equipo(this, dialogo);
+        dialogo.getContentPane().add(panelDesbloqueo);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }//GEN-LAST:event_btndesbloquearequipoActionPerformed
+
+    private void btnBloqueosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBloqueosActionPerformed
+        // TODO add your handling code here:
+        // En tu método btnBloqueosActionPerformed de Administrador_Equipos:
+        String nombreLab = this.lbllaboratorionombre.getText();
+        Administrador_Bloqueos panelBloqueos = new Administrador_Bloqueos(nombreLab);
+
+        // 2. Creamos el contenedor (ventana)
+        javax.swing.JFrame frame = new javax.swing.JFrame("Administración de Bloqueos");
+
+        // 3. Configuramos la ventana
+        frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE); // Solo cierra esta ventana, no todo el programa
+        frame.add(panelBloqueos);
+        frame.pack(); // Ajusta el tamaño de la ventana al tamaño del panel
+        frame.setLocationRelativeTo(null); // Centra la ventana en pantalla
+        frame.setResizable(false); // Recomendado para que el diseño no se rompa
+
+        // 4. Mostramos
+        frame.setVisible(true);
+        this.dispose();
+
+
+    }//GEN-LAST:event_btnBloqueosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -667,7 +943,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
     private javax.swing.JLabel lblenuso;
     private javax.swing.JLabel lblequipostotales;
     private javax.swing.JLabel lblestado;
-    private javax.swing.JLabel lblip;
     private javax.swing.JLabel lbllaboratorionombre;
     private javax.swing.JLabel lblnumeroenuso;
     private javax.swing.JLabel lblocupacionactual;

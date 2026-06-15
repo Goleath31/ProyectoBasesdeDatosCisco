@@ -4,17 +4,27 @@
  */
 package Presentacion;
 
+import Negocio.NegocioException;
+import dtos.DesbloqueoEquipoDTO;
+
 /**
  *
  * @author golea
  */
 public class Confirmacion_Desbloqueo_Equipo extends javax.swing.JPanel {
 
+    private Administrador_Equipos ventanaPrincipal;
+    private javax.swing.JDialog dialogoContenedor;
+
     /**
      * Creates new form Confirmacion_Desbloqueo_Equipo
      */
-    public Confirmacion_Desbloqueo_Equipo() {
+    public Confirmacion_Desbloqueo_Equipo(Administrador_Equipos principal, javax.swing.JDialog dialogo) {
         initComponents();
+        this.ventanaPrincipal = principal;
+        this.dialogoContenedor = dialogo;
+        initComponents();
+        jTextField1.setText("");
     }
 
     /**
@@ -67,12 +77,22 @@ public class Confirmacion_Desbloqueo_Equipo extends javax.swing.JPanel {
         btnaplicarbloqueo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo.setForeground(new java.awt.Color(255, 255, 255));
         btnaplicarbloqueo.setText("Confirmar Desbloqueo");
+        btnaplicarbloqueo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueoActionPerformed(evt);
+            }
+        });
 
         btnaplicarbloqueo1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo1.setForeground(new java.awt.Color(0, 86, 150));
         btnaplicarbloqueo1.setText("Cancelar");
         btnaplicarbloqueo1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 86, 150), 2, true));
         btnaplicarbloqueo1.setOpaque(true);
+        btnaplicarbloqueo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueo1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -127,6 +147,45 @@ public class Confirmacion_Desbloqueo_Equipo extends javax.swing.JPanel {
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentResized
+
+    private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
+        // TODO add your handling code here:
+        String numeroMaquinaStr = jTextField1.getText().trim();
+
+        if (numeroMaquinaStr.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese el número de máquina.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            int numeroMaquina = Integer.parseInt(numeroMaquinaStr);
+            int idLaboratorio = ventanaPrincipal.getIdLaboratorioActual();
+
+            // LLAMADA DIRECTA: Invocamos al nuevo método que acabamos de crear en el negocio
+            boolean exito = ventanaPrincipal.getComputadoraNegocio().desbloquearEquipoPorNumero(numeroMaquina, idLaboratorio);
+
+            if (exito) {
+                javax.swing.JOptionPane.showMessageDialog(this, "El equipo número " + numeroMaquina + " ha sido Desbloqueado exitosamente.", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+              
+                if (dialogoContenedor != null) {
+                    dialogoContenedor.dispose();
+                }
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El número de máquina debe ser un valor numérico.", "Error de Formato", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (NegocioException e) {
+            // Captura si las reglas de negocio fallan o el equipo no existe
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Validación de Desbloqueo", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
+
+    private void btnaplicarbloqueo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueo1ActionPerformed
+        // TODO add your handling code here:
+        if (dialogoContenedor != null) {
+            dialogoContenedor.dispose();
+        }
+    }//GEN-LAST:event_btnaplicarbloqueo1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

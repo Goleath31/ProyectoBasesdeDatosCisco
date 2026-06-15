@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -144,6 +144,9 @@
                       <Dimension value="[46, 14]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBloqueosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="BtnDesbloqueos">
                   <Properties>
@@ -205,12 +208,9 @@
                       <Component id="lbltitulo" min="-2" pref="102" max="-2" attributes="0"/>
                       <EmptySpace pref="351" max="32767" attributes="0"/>
                       <Component id="btnRegresar" min="-2" pref="84" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lbllaboratorionombre" alignment="0" min="-2" pref="167" max="-2" attributes="0"/>
-                          <Component id="lblip" alignment="0" min="-2" pref="167" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <Component id="lbllaboratorionombre" min="-2" pref="167" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblusuario" min="-2" pref="80" max="-2" attributes="0"/>
                           <Component id="lbladmin" alignment="1" min="-2" pref="65" max="-2" attributes="0"/>
@@ -221,23 +221,18 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="lbltitulo" alignment="3" max="32767" attributes="0"/>
                               <Component id="btnRegresar" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lbllaboratorionombre" alignment="3" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lbllaboratorionombre" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblusuario" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="lblusuario" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lbladmin" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblip" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="lbladmin" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -268,6 +263,9 @@
                 </Property>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegresarActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lbllaboratorionombre">
               <Properties>
@@ -283,18 +281,6 @@
                   <Color id="Default Cursor"/>
                 </Property>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblip">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Arial" size="8" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="96" green="56" red="0" type="rgb"/>
-                </Property>
-                <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Ip"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblusuario">
@@ -604,25 +590,25 @@
                               </Group>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblestado" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
-                                      <Component id="cbxestados" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
+                                      <Component id="lblestado" min="-2" pref="46" max="-2" attributes="0"/>
+                                      <Component id="cbxestados" min="-2" pref="89" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblbuscarequipo" min="-2" pref="85" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
+                                      <Component id="lblbuscarequipo" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
                                           <Component id="tctbuscarequipo" min="-2" pref="141" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="btnfltrar" min="-2" pref="59" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                          <Component id="btndesbloquearequipo" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="btnbloquearequipo" min="-2" pref="106" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="btnrestaurartabla" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="btndesbloquearequipo" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnbloquearequipo" min="-2" pref="106" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnrestaurartabla" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                  <EmptySpace min="18" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -631,30 +617,21 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblestado" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
-                                      <Component id="lblbuscarequipo" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="cbxestados" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="tctbuscarequipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnfltrar" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btnrestaurartabla" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnbloquearequipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btndesbloquearequipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblestado" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
+                              <Component id="lblbuscarequipo" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="cbxestados" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="tctbuscarequipo" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="btnfltrar" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="btndesbloquearequipo" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="btnbloquearequipo" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                              <Component id="btnrestaurartabla" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
@@ -698,7 +675,7 @@
                     </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="3">
-                        <StringItem index="0" value="Activo"/>
+                        <StringItem index="0" value="Disponible"/>
                         <StringItem index="1" value="En uso"/>
                         <StringItem index="2" value="Bloqueado"/>
                       </StringArray>
@@ -733,7 +710,6 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="10" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="jTextField1"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[73, 15]"/>
                     </Property>
@@ -746,6 +722,9 @@
                       <Dimension value="[73, 15]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnfltrarActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnrestaurartabla">
                   <Properties>
@@ -777,6 +756,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Bloquear Equipo"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnbloquearequipoActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btndesbloquearequipo">
                   <Properties>
@@ -791,6 +773,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Desbloquear Equipo"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesbloquearequipoActionPerformed"/>
+                  </Events>
                 </Component>
                 <Container class="javax.swing.JPanel" name="jPanel9">
 
@@ -819,14 +804,8 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Arial" size="12" style="0"/>
                         </Property>
-                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="5" rowCount="4">
-                            <Column editable="false" title="Equipo Id" type="java.lang.Integer"/>
-                            <Column editable="false" title="Direccion IP" type="java.lang.String"/>
-                            <Column editable="false" title="Ubicacion" type="java.lang.Integer"/>
-                            <Column editable="true" title="Estado" type="java.lang.String"/>
-                            <Column editable="false" title="Usuario" type="java.lang.String"/>
-                          </Table>
+                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <SerializedValue value="-84,-19,0,5,115,114,0,64,111,114,103,46,110,101,116,98,101,97,110,115,46,109,111,100,117,108,101,115,46,102,111,114,109,46,101,100,105,116,111,114,115,50,46,84,97,98,108,101,77,111,100,101,108,69,100,105,116,111,114,36,78,98,84,97,98,108,101,77,111,100,101,108,-95,8,-65,-35,21,111,108,-106,12,0,0,120,114,0,36,106,97,118,97,120,46,115,119,105,110,103,46,116,97,98,108,101,46,65,98,115,116,114,97,99,116,84,97,98,108,101,77,111,100,101,108,-122,-97,-68,88,104,-50,-117,-101,2,0,1,76,0,12,108,105,115,116,101,110,101,114,76,105,115,116,116,0,37,76,106,97,118,97,120,47,115,119,105,110,103,47,101,118,101,110,116,47,69,118,101,110,116,76,105,115,116,101,110,101,114,76,105,115,116,59,120,112,119,8,0,0,0,4,0,0,0,4,117,114,0,19,91,76,106,97,118,97,46,108,97,110,103,46,83,116,114,105,110,103,59,-83,-46,86,-25,-23,29,123,71,2,0,0,120,112,0,0,0,4,116,0,9,69,113,117,105,112,111,32,73,100,116,0,12,68,105,114,101,99,99,105,111,110,32,73,80,116,0,9,85,98,105,99,97,99,105,111,110,116,0,6,69,115,116,97,100,111,117,114,0,2,91,90,87,-113,32,57,20,-72,93,-30,2,0,0,120,112,0,0,0,4,0,0,0,0,116,0,17,106,97,118,97,46,108,97,110,103,46,73,110,116,101,103,101,114,116,0,16,106,97,118,97,46,108,97,110,103,46,83,116,114,105,110,103,113,0,126,0,12,113,0,126,0,13,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,120"/>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
@@ -947,6 +926,9 @@
                         <Property name="text" type="java.lang.String" value="iTSON"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtcontrase&#xf1;aActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -968,12 +950,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&lt;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnizquierdaActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnderecha">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&gt;"/>
-                    <Property name="actionCommand" type="java.lang.String" value="&gt;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnderechaActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

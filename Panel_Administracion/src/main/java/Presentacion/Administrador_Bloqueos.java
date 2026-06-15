@@ -4,17 +4,82 @@
  */
 package Presentacion;
 
+import Negocio.AlumnoNegocio;
+import Negocio.IAlumnoNegocio;
+import Negocio.IComputadoraNegocio;
+import Negocio.NegocioException;
+import Persistencia.AlumnoDAO;
+import Persistencia.ComputadoraDAO;
+import Persistencia.ConexionBD;
+import Persistencia.IAlumnoDAO;
+import Persistencia.IComputadoraDAO;
+import Persistencia.IConexionBD;
+import dtos.AlumnoBloqueadoTablaDTO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author golea
  */
 public class Administrador_Bloqueos extends javax.swing.JPanel {
 
+    private int paginaActual = 1;
+    private int totalPaginas = 1;
+    private final int REGISTROS_POR_PAGINA = 5;
+    private final IAlumnoNegocio alumnoNegocio;
+    private int idLaboratorioActual = 0;
+    private String nombreLaboratorio;
+
     /**
      * Creates new form Administrador_Bloqueos
      */
-    public Administrador_Bloqueos() {
+    public Administrador_Bloqueos(String nombreLab) {
         initComponents();
+        if (lbllaboratorio != null) {
+            lbllaboratorio.setText(nombreLab);
+        }
+        nombreLaboratorio = nombreLab;
+        IConexionBD conexionBD = new ConexionBD();
+        IComputadoraDAO computadoraDAO = new ComputadoraDAO(conexionBD);
+        IAlumnoDAO alumnoDAO = new AlumnoDAO(conexionBD);
+        this.alumnoNegocio = new AlumnoNegocio(new AlumnoDAO(conexionBD));
+        cargarTablaAlumnosBloqueados();
+
+    }
+
+    public void setNombreLaboratorio(String nombre) {
+        this.lbllaboratorio.setText(nombre);
+    }
+
+    public void cargarTablaAlumnosBloqueados() {
+        try {
+            String criterio = txtbuscar.getText().trim();
+            // Asegúrate de que los parámetros de paginación sean correctos
+            List<AlumnoBloqueadoTablaDTO> lista = this.alumnoNegocio.obtenerAlumnosBloqueadosPaginados(
+                    criterio, this.paginaActual, this.REGISTROS_POR_PAGINA
+            );
+
+            DefaultTableModel modelo = (DefaultTableModel) tabladesbloqueos.getModel();
+            modelo.setRowCount(0); // Limpia la tabla
+
+            for (AlumnoBloqueadoTablaDTO alumno : lista) {
+                Object[] fila = {
+                    alumno.getIdAlumno(),
+                    alumno.getNombre(),
+                    alumno.getMotivo(),
+                    alumno.getFechaBloqueo()
+                };
+                modelo.addRow(fila);
+            }
+
+            // Actualizamos la etiqueta de paginación
+            btnpaginas.setText("Mostrando página " + paginaActual + " de " + totalPaginas);
+
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la tabla: " + e.getMessage());
+        }
     }
 
     /**
@@ -36,16 +101,12 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         lbltitulo = new javax.swing.JLabel();
         btnregresar = new javax.swing.JButton();
         lbllaboratorio = new javax.swing.JLabel();
-        lblip = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
         lbladmin = new javax.swing.JLabel();
         contenedorcontenido = new javax.swing.JPanel();
         contenedortotalbloqueos = new javax.swing.JPanel();
         lbltotalbloqueos = new javax.swing.JLabel();
         lblbloqueados = new javax.swing.JLabel();
-        contenedorenuso = new javax.swing.JPanel();
-        lblenuso = new javax.swing.JLabel();
-        lblnutotaldeuso = new javax.swing.JLabel();
         contenidopanel = new javax.swing.JPanel();
         lblmotivos = new javax.swing.JLabel();
         cbxmotivos = new javax.swing.JComboBox<>();
@@ -82,9 +143,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jButton1.setInheritsPopupMenu(true);
-        jButton1.setMaximumSize(new java.awt.Dimension(46, 14));
-        jButton1.setMinimumSize(new java.awt.Dimension(46, 14));
-        jButton1.setPreferredSize(new java.awt.Dimension(46, 14));
 
         jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(102, 102, 102));
@@ -165,11 +223,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         lbllaboratorio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lbllaboratorio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        lblip.setFont(new java.awt.Font("Arial", 0, 8)); // NOI18N
-        lblip.setForeground(new java.awt.Color(0, 86, 150));
-        lblip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblip.setText("Ip");
-
         lblusuario.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblusuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblusuario.setText("Usuario");
@@ -191,9 +244,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
                 .addComponent(btnregresar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbllaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblip, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lbllaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,15 +258,12 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnregresar))
+                        .addComponent(btnregresar)
+                        .addComponent(lbllaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(contenedorsuperiorLayout.createSequentialGroup()
-                        .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbllaboratorio)
-                            .addComponent(lblusuario))
+                        .addComponent(lblusuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(contenedorsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbladmin)
-                            .addComponent(lblip))))
+                        .addComponent(lbladmin)))
                 .addContainerGap())
         );
 
@@ -256,39 +304,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 .addGap(37, 37, 37))
         );
 
-        contenedorenuso.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 226, 226), 2, true));
-
-        lblenuso.setBackground(new java.awt.Color(226, 226, 226));
-        lblenuso.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
-        lblenuso.setForeground(new java.awt.Color(93, 95, 95));
-        lblenuso.setText("EN USO");
-
-        lblnutotaldeuso.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblnutotaldeuso.setForeground(new java.awt.Color(0, 86, 150));
-        lblnutotaldeuso.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblnutotaldeuso.setText("300");
-
-        javax.swing.GroupLayout contenedorenusoLayout = new javax.swing.GroupLayout(contenedorenuso);
-        contenedorenuso.setLayout(contenedorenusoLayout);
-        contenedorenusoLayout.setHorizontalGroup(
-            contenedorenusoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorenusoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(contenedorenusoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblenuso, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblnutotaldeuso, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(115, Short.MAX_VALUE))
-        );
-        contenedorenusoLayout.setVerticalGroup(
-            contenedorenusoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorenusoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblenuso, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblnutotaldeuso)
-                .addGap(37, 37, 37))
-        );
-
         contenidopanel.setBackground(new java.awt.Color(255, 255, 255));
 
         lblmotivos.setBackground(new java.awt.Color(226, 226, 226));
@@ -313,9 +328,19 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         txtbuscar.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         txtbuscar.setText("jTextField1");
         txtbuscar.setPreferredSize(new java.awt.Dimension(73, 15));
+        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtbuscarActionPerformed(evt);
+            }
+        });
 
         btnfiltrar.setText("Fltrar");
         btnfiltrar.setPreferredSize(new java.awt.Dimension(73, 15));
+        btnfiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnfiltrarActionPerformed(evt);
+            }
+        });
 
         btnrestaurartabla.setBackground(new java.awt.Color(0, 86, 150));
         btnrestaurartabla.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -347,11 +372,11 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "ID ALUMNO", "NOMBRE", "FECHA Y HORA", "MOTIVO"
+                "ID ALUMNO", "NOMBRE", "MOTIVO", "FECHA Y HORA"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
@@ -454,6 +479,11 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         });
 
         btnderecha.setText(">");
+        btnderecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnderechaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout contenidopanelLayout = new javax.swing.GroupLayout(contenidopanel);
         contenidopanel.setLayout(contenidopanelLayout);
@@ -473,19 +503,19 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                             .addGap(43, 43, 43))
                         .addGroup(contenidopanelLayout.createSequentialGroup()
                             .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cbxmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(23, 23, 23)
-                            .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblbuscaralumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(contenidopanelLayout.createSequentialGroup()
-                                    .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnfiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(382, 382, 382))
-                        .addGroup(contenidopanelLayout.createSequentialGroup()
-                            .addComponent(contenedoraplicadorbloqueomanual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                    .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cbxmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(23, 23, 23)
+                                    .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblbuscaralumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(contenidopanelLayout.createSequentialGroup()
+                                            .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(btnfiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(contenedoraplicadorbloqueomanual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(345, 345, 345)))
                     .addGroup(contenidopanelLayout.createSequentialGroup()
                         .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnrestaurartabla)
@@ -505,9 +535,9 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                             .addComponent(lblbuscaralumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnfiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbxmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnfiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnrestaurartabla, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -522,7 +552,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                                 .addComponent(btnderecha, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addComponent(contenedoraplicadorbloqueomanual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(11, 11, 11))
         );
 
         javax.swing.GroupLayout contenedorcontenidoLayout = new javax.swing.GroupLayout(contenedorcontenido);
@@ -535,8 +565,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                     .addComponent(contenidopanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(contenedorcontenidoLayout.createSequentialGroup()
                         .addComponent(contenedortotalbloqueos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(contenedorenuso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -544,9 +572,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
             contenedorcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contenedorcontenidoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contenedorcontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(contenedorenuso, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contenedortotalbloqueos, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(contenedortotalbloqueos, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(contenidopanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -572,15 +598,71 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
     private void btnrestaurartablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrestaurartablaActionPerformed
         // TODO add your handling code here:
+        this.txtbuscar.setText("");
+        this.paginaActual = 1;
+        cargarTablaAlumnosBloqueados();
     }//GEN-LAST:event_btnrestaurartablaActionPerformed
 
     private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
         // TODO add your handling code here:
+        int id = Integer.parseInt(txtidalumno.getText());
+        String motivo = txtmotivo.getText();
+
+        // 1. Validaciones básicas antes de abrir el diálogo
+        if (motivo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, llene los campos de ID y motivo.");
+            return;
+        }
+
+        // 2. Crear panel de confirmación
+        Confirmacion_bloqueo_alumno panelConfirmacion = new Confirmacion_bloqueo_alumno(
+                this.alumnoNegocio, id, "Nombre del Alumno", motivo
+        );
+
+        // 3. Crear y configurar el JDialog
+        javax.swing.JDialog dialog = new javax.swing.JDialog(
+                (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                "Confirmar Bloqueo",
+                true
+        );
+        dialog.getContentPane().add(panelConfirmacion);
+        panelConfirmacion.setDialogPadre(dialog); // Pasar referencia para cerrar
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        // 4. Refrescar la tabla tras cerrar el diálogo
+        cargarTablaAlumnosBloqueados();
     }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
 
     private void btnizquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnizquierdaActionPerformed
         // TODO add your handling code here:
+        if (this.paginaActual > 1) {
+            this.paginaActual--;
+            cargarTablaAlumnosBloqueados();
+        }
     }//GEN-LAST:event_btnizquierdaActionPerformed
+
+    private void btnfiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfiltrarActionPerformed
+        // TODO add your handling code here:
+        this.paginaActual = 1;
+        cargarTablaAlumnosBloqueados();
+
+
+    }//GEN-LAST:event_btnfiltrarActionPerformed
+
+    private void btnderechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnderechaActionPerformed
+        // TODO add your handling code here:
+        if (this.paginaActual < totalPaginas) {
+            this.paginaActual++;
+            cargarTablaAlumnosBloqueados();
+        }
+    }//GEN-LAST:event_btnderechaActionPerformed
+
+    private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtbuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -595,7 +677,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     private javax.swing.JPanel contendeorizquierdo;
     private javax.swing.JPanel contenedoraplicadorbloqueomanual;
     private javax.swing.JPanel contenedorcontenido;
-    private javax.swing.JPanel contenedorenuso;
     private javax.swing.JPanel contenedorsuperior;
     private javax.swing.JPanel contenedortotalbloqueos;
     private javax.swing.JPanel contenidopanel;
@@ -609,13 +690,10 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     private javax.swing.JLabel lbladmin;
     private javax.swing.JLabel lblbloqueados;
     private javax.swing.JLabel lblbuscaralumnos;
-    private javax.swing.JLabel lblenuso;
     private javax.swing.JLabel lblidalumno;
-    private javax.swing.JLabel lblip;
     private javax.swing.JLabel lbllaboratorio;
     private javax.swing.JLabel lblmotivo;
     private javax.swing.JLabel lblmotivos;
-    private javax.swing.JLabel lblnutotaldeuso;
     private javax.swing.JLabel lbltitulo;
     private javax.swing.JLabel lbltituloaplicarbloqueo;
     private javax.swing.JLabel lbltotalbloqueos;
