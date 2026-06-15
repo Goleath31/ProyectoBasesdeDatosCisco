@@ -15,17 +15,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Implementación de acceso a datos para la entidad Computadora. Proporciona
+ * métodos para gestión de estados, filtrado y desbloqueo de equipos.
  *
- * @author golea
+ * * @author golea
  */
 public class ComputadoraDAO implements IComputadoraDAO {
 
     private IConexionBD conexion;
 
+    /**
+     * Constructor que inyecta la dependencia de conexión.
+     *
+     * @param conexion Objeto que implementa {@link IConexionBD}.
+     */
     public ComputadoraDAO(IConexionBD conexion) {
         this.conexion = conexion;
     }
 
+    /**
+     * Consulta todas las computadoras asociadas a un laboratorio específico.
+     *
+     * * @param idLaboratorio ID del laboratorio a consultar.
+     * @return Lista de objetos {@link ComputadoraTablaDTO}.
+     * @throws PersistenciaException Si la consulta falla.
+     */
     @Override
     public List<ComputadoraTablaDTO> obtenerComputadorasPorLaboratorio(int idLaboratorio) throws PersistenciaException {
         String sentenciaSQL = "SELECT id_computadora, numero_maquina, direccion_ip, estatus FROM Computadora WHERE id_laboratorio = ?;";
@@ -51,6 +65,14 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Cambia el estatus de una computadora a 'Bloqueado'.
+     *
+     * * @param registro DTO con el número de máquina y el ID del laboratorio.
+     * @return true si la operación fue exitosa, false si no se encontró el
+     * equipo.
+     * @throws PersistenciaException Si hay errores de transacción.
+     */
     @Override
     public boolean bloquearEquipoPorNumero(BloqueoEquipoDTO registro) throws PersistenciaException {
         String sentenciaSQL = "UPDATE Computadora SET estatus = 'Bloqueado' WHERE numero_maquina = ? AND id_laboratorio = ?;";
@@ -75,6 +97,16 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Valida una contraseña maestra contra el laboratorio asociado antes de
+     * desbloquear el equipo. Utiliza una transacción para asegurar la
+     * integridad de la validación.
+     *
+     * * @param registro DTO con el ID de la computadora y la contraseña
+     * ingresada.
+     * @return true si la contraseña es correcta y el equipo se desbloqueó.
+     * @throws PersistenciaException En caso de fallo en la base de datos.
+     */
     @Override
     public boolean desbloquearEquipoConContrasena(DesbloqueoEquipoDTO registro) throws PersistenciaException {
         // Primero verificamos que la contraseña ingresada pertenezca a la contraseña_maestra de la tabla Laboratorio asociada
@@ -120,6 +152,13 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Obtiene el número total de computadoras que tienen el estatus 'En uso'.
+     *
+     * @param idLaboratorio ID del laboratorio.
+     * @return Cantidad de equipos en uso.
+     * @throws PersistenciaException Si ocurre un error.
+     */
     @Override
     public int obtenerContadorEquiposEnUso(int idLaboratorio) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) FROM Computadora WHERE id_laboratorio = ? AND estatus = 'En uso';";
@@ -139,6 +178,15 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Busca información de un laboratorio a partir de la dirección IP de una
+     * computadora.
+     *
+     * * @param ip Dirección IP del equipo.
+     * @return DTO con la información del laboratorio asociado o null si no se
+     * encuentra.
+     * @throws PersistenciaException Si la búsqueda falla.
+     */
     @Override
     public ComputadoraTablaDTO obtenerIdLaboratorioPorIP(String ip) throws PersistenciaException {
         String sentenciaSQL = "SELECT l.id_laboratorio, l.nombre, l.contrasena_maestra "
@@ -165,6 +213,18 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Filtra computadoras por laboratorio, criterio de texto y estatus
+     * utilizando paginación.
+     *
+     * * @param idLaboratorio ID del laboratorio.
+     * @param criterio Filtro de búsqueda (IP o número de máquina).
+     * @param estatus Estatus a filtrar ('Disponible', 'Bloqueado', etc.).
+     * @param pagina Página actual.
+     * @param tamanoPagina Registros por página.
+     * @return Lista paginada de {@link ComputadoraTablaDTO}.
+     * @throws PersistenciaException Si ocurre un error SQL.
+     */
     @Override
     public int obtenerTotalEquiposLaboratorio(int idLaboratorio) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) FROM Computadora WHERE id_laboratorio = ?;";
@@ -181,6 +241,18 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Filtra computadoras por laboratorio, criterio de texto y estatus
+     * utilizando paginación.
+     *
+     * * @param idLaboratorio ID del laboratorio.
+     * @param criterio Filtro de búsqueda (IP o número de máquina).
+     * @param estatus Estatus a filtrar ('Disponible', 'Bloqueado', etc.).
+     * @param pagina Página actual.
+     * @param tamanoPagina Registros por página.
+     * @return Lista paginada de {@link ComputadoraTablaDTO}.
+     * @throws PersistenciaException Si ocurre un error SQL.
+     */
     @Override
     public List<ComputadoraTablaDTO> filtrarComputadorasPorLaboratorio(int idLaboratorio, String criterio, String estatus, int pagina, int tamanoPagina) throws PersistenciaException {
         List<ComputadoraTablaDTO> lista = new ArrayList<>();
@@ -245,6 +317,12 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Calcula el total de registros de computadoras para fines de paginación.
+     *
+     * * @return Total de registros que coinciden con los filtros aplicados.
+     * @throws PersistenciaException Si falla el conteo.
+     */
     @Override
     public int contarComputadorasFiltradas(int idLaboratorio, String criterio, String estatus) throws PersistenciaException {
         StringBuilder sentenciaSQL = new StringBuilder(
@@ -291,6 +369,14 @@ public class ComputadoraDAO implements IComputadoraDAO {
         }
     }
 
+    /**
+     * Desbloquea un equipo directamente por su número de máquina.
+     *
+     * * @param numeroMaquina Número de máquina a desbloquear.
+     * @param idLaboratorio ID del laboratorio.
+     * @return true si la operación afectó al registro.
+     * @throws PersistenciaException Si falla la actualización.
+     */
     @Override
     public boolean desbloquearEquipoPorNumero(int numeroMaquina, int idLaboratorio) throws PersistenciaException {
         // Cambiamos el estatus a 'Disponible' que es el estado inicial normal de tus equipos

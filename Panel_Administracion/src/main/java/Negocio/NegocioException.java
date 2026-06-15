@@ -5,15 +5,23 @@
 package Negocio;
 
 /**
- *
- * @author golea
+ * Excepción personalizada para errores de la capa de negocio.
  */
 public class NegocioException extends Exception {
 
+    /**
+     * Crea una excepción con un mensaje descriptivo.
+     * @param mensaje Descripción del error.
+     */
     public NegocioException(String mensaje) {
         super(mensaje);
     }
 
+    /**
+     * Crea una excepción con un mensaje y la causa original.
+     * @param mensaje Descripción del error.
+     * @param causa La excepción original capturada (PersistenciaException).
+     */
     public NegocioException(String mensaje, Throwable causa) {
         super(mensaje, causa);
     }

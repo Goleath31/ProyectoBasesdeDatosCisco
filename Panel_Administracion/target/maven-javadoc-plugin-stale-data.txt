@@ -1,0 +1,55 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+--no-fonts
+-classpath
+'C:/Users/golea/.m2/repository/org/netbeans/external/AbsoluteLayout/RELEASE230/AbsoluteLayout-RELEASE230.jar;C:/Users/golea/.m2/repository/com/mysql/mysql-connector-j/9.7.0/mysql-connector-j-9.7.0.jar;C:/Users/golea/.m2/repository/com/google/protobuf/protobuf-java/4.31.1/protobuf-java-4.31.1.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+23
+-sourcepath
+'C:/Users/golea/Documents/GitHub/ProyectoBasesdeDatosCisco/Panel_Administracion/src/main/java'
+-Xdoclint:none
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/golea/Documents/GitHub/ProyectoBasesdeDatosCisco/Panel_Administracion/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Panel_Administracion 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Panel_Administracion 1.0-SNAPSHOT API'
+dtos
+Entidad
+Negocio
+Persistencia
+Presentacion
+C:\Users\golea\.m2\repository\org\netbeans\external\AbsoluteLayout\RELEASE230\AbsoluteLayout-RELEASE230.jar = 1757483469971
+C:\Users\golea\.m2\repository\com\mysql\mysql-connector-j\9.7.0\mysql-connector-j-9.7.0.jar = 1780413337688
+C:\Users\golea\.m2\repository\com\google\protobuf\protobuf-java\4.31.1\protobuf-java-4.31.1.jar = 1769493518838
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\src\main\java = 1781517822629
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\allclasses-index.html = 1781528012406
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\allpackages-index.html = 1781528012411
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\element-list = 1781528011975
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\help-doc.html = 1781528012462
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\index-all.html = 1781528012450
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\index.html = 1781528012366
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\javadoc.bat = 1781527878699
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\member-search-index.js = 1781528012420
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\module-search-index.js = 1781528012413
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\overview-summary.html = 1781528012458
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\overview-tree.html = 1781528012361
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\package-search-index.js = 1781528012415
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\search.html = 1781528012455
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\serialized-form.html = 1781528012117
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\tag-search-index.js = 1781528012422
+C:\Users\golea\Documents\GitHub\ProyectoBasesdeDatosCisco\Panel_Administracion\target\reports\apidocs\type-search-index.js = 1781528012416

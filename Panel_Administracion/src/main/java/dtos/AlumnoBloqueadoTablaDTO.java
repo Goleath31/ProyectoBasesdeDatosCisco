@@ -5,21 +5,32 @@
 package dtos;
 
 /**
+ * Representa la información de un alumno bloqueado para ser visualizada en una
+ * tabla.
  *
- * @author golea
+ * * @author golea
  */
-import java.sql.Timestamp; // O usa String si prefieres manejar la fecha formateada desde SQL
-
 public class AlumnoBloqueadoTablaDTO {
 
     private int idAlumno;
     private String nombre;
     private String motivo;
-    private String fechaBloqueo; // Usamos String para recibirla ya formateada desde la BD
+    private String fechaBloqueo;
 
+    /**
+     * Constructor por defecto.
+     */
     public AlumnoBloqueadoTablaDTO() {
     }
 
+    /**
+     * Constructor con parámetros.
+     *
+     * @param idAlumno Identificador único del alumno.
+     * @param nombre Nombre completo del alumno.
+     * @param motivo Razón por la cual el alumno fue bloqueado.
+     * @param fechaBloqueo Fecha y hora en formato String del bloqueo.
+     */
     public AlumnoBloqueadoTablaDTO(int idAlumno, String nombre, String motivo, String fechaBloqueo) {
         this.idAlumno = idAlumno;
         this.nombre = nombre;

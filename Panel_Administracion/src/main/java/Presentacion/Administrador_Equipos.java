@@ -39,7 +39,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
                     new Object[][]{},
                     new String[]{"ID Equipo", "Dirección IP", "Número Máquina", "Estado"}
             ) {
-                // Hacemos que las celdas no sean editables manualmente al dar doble clic
                 @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return false;
@@ -47,23 +46,20 @@ public class Administrador_Equipos extends javax.swing.JFrame {
             };
             tabladeequipos.setModel(modeloCuatroColumnas);
         }
-        IConexionBD conexionBD = new ConexionBD(); // Reemplaza por tu clase real instalada en el proyecto
+        IConexionBD conexionBD = new ConexionBD(); 
         IComputadoraDAO computadoraDAO = new ComputadoraDAO(conexionBD);
         this.computadoraNegocio = new ComputadoraNegocio(computadoraDAO);
 
-        // Auto-detección inicial libre de lógica SQL directa en la UI
         this.inicializarPanelAdministrador();
 
     }
 
     private void inicializarPanelAdministrador() {
         try {
-            // 1. Obtener la IP local del Sistema Operativo
             String ipLocal = InetAddress.getLocalHost().getHostAddress();
             System.out.println("IP detectada de la máquina: " + ipLocal);
-            ipLocal = "192.168.2.3";
+            /*midificar si hacen pruebas*/ipLocal = "192.168.2.3";
 
-            // 2. Consultar a tu capa de negocio la información del laboratorio
             ComputadoraTablaDTO labInfo = computadoraNegocio.obtenerIdLaboratorioPorIP(ipLocal);
 
             if (labInfo != null) {
@@ -93,9 +89,7 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Llena el JTable real asignado en tu archivo .form (tabladeequipos)
-     */
+    
     private void cargarTablaComputadoras() {
         try {
             if (tabladeequipos == null) {
@@ -103,9 +97,7 @@ public class Administrador_Equipos extends javax.swing.JFrame {
             }
 
             DefaultTableModel modeloTabla = (DefaultTableModel) tabladeequipos.getModel();
-            modeloTabla.setRowCount(0); // Limpiar filas anteriores
-
-            // Consumir tu capa de negocio
+            modeloTabla.setRowCount(0); 
             List<ComputadoraTablaDTO> listaEquipos = computadoraNegocio.obtenerComputadorasPorLaboratorio(idLaboratorioActual);
 
             if (listaEquipos != null) {
@@ -124,29 +116,19 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Actualiza los marcadores numéricos de la interfaz utilizando tu capa de
-     * negocio
-     */
-    /**
-     * Actualiza las estadísticas, contadores y porcentaje de uso en la interfaz
-     * gráfica
-     */
+    
     private void actualizarMetricasUso() {
         try {
-            // 1. Mostrar las computadoras que están actualmente en uso
             if (lblnumeroenuso != null) {
                 int enUso = computadoraNegocio.obtenerContadorEquiposEnUso(idLaboratorioActual);
                 lblnumeroenuso.setText(String.valueOf(enUso));
             }
 
-            // 2. Mostrar el total de computadoras pertenecientes al laboratorio
             if (jLabel8lblnumeroequipostotales != null) {
                 int totales = computadoraNegocio.obtenerTotalEquiposLaboratorio(idLaboratorioActual);
                 jLabel8lblnumeroequipostotales.setText(String.valueOf(totales));
             }
 
-            // 3. Mostrar el porcentaje total de ocupación calculado por la capa de negocio
             if (lblocupacionporcentage != null) {
                 String porcentajeTexto = computadoraNegocio.calcularPorcentajeOcupacion(idLaboratorioActual);
                 lblocupacionporcentage.setText(porcentajeTexto);
@@ -179,7 +161,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
 
             this.totalPaginas = computadoraNegocio.calcularTotalPaginas(idLaboratorioActual, criterio, estatus, REGISTROS_POR_PAGINA);
 
-            // Reajuste preventivo de la página actual
             if (this.paginaActual > this.totalPaginas) {
                 this.paginaActual = this.totalPaginas;
             }
@@ -187,10 +168,8 @@ public class Administrador_Equipos extends javax.swing.JFrame {
                 this.paginaActual = 1;
             }
 
-            // 3. Escribir el texto dinámico en el label solicitado
             lblcontadordepaginas.setText("Mostrando " + this.paginaActual + " de " + this.totalPaginas + " Paginas Equipos");
 
-            // 4. Solicitar datos parciales
             List<ComputadoraTablaDTO> listaEquipos = computadoraNegocio.filtrarComputadorasPorLaboratorio(
                     idLaboratorioActual, criterio, estatus, this.paginaActual, REGISTROS_POR_PAGINA);
 
@@ -805,12 +784,11 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         // TODO add your handling code here:
         javax.swing.JDialog dialogo = new javax.swing.JDialog(this, "Bloquear Equipo", true);
 
-        // Pasamos 'this' (el Administrador) y el diálogo para poder cerrarlo después
         Confirmacion_Bloqueo_Equipos panelBloqueo = new Confirmacion_Bloqueo_Equipos(this, dialogo);
 
         dialogo.getContentPane().add(panelBloqueo);
         dialogo.pack();
-        dialogo.setLocationRelativeTo(this); // Centrar en pantalla
+        dialogo.setLocationRelativeTo(this); 
         dialogo.setVisible(true);
 
     }//GEN-LAST:event_btnbloquearequipoActionPerformed
@@ -825,9 +803,8 @@ public class Administrador_Equipos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtcontraseñaActionPerformed
 
     private void btnfltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfltrarActionPerformed
-        // TODO add your handling code here:
-        // 1. Obtener el texto del buscador de equipos
-        this.paginaActual = 1; // Obligatorio regresar a la uno al cambiar filtros
+   
+        this.paginaActual = 1;
         this.cargarTablaComputadorasPaginada();
     }//GEN-LAST:event_btnfltrarActionPerformed
 
@@ -840,7 +817,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnderechaActionPerformed
 
     private void btnizquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnizquierdaActionPerformed
-        // TODO add your handling code here:
         if (this.paginaActual > 1) {
             this.paginaActual--;
             this.cargarTablaComputadorasPaginada();
@@ -848,7 +824,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnizquierdaActionPerformed
 
     private void btndesbloquearequipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesbloquearequipoActionPerformed
-        // TODO add your handling code here:
         javax.swing.JDialog dialogo = new javax.swing.JDialog(this, "Desbloquear Equipo", true);
         Confirmacion_Desbloqueo_Equipo panelDesbloqueo = new Confirmacion_Desbloqueo_Equipo(this, dialogo);
         dialogo.getContentPane().add(panelDesbloqueo);
@@ -858,22 +833,18 @@ public class Administrador_Equipos extends javax.swing.JFrame {
     }//GEN-LAST:event_btndesbloquearequipoActionPerformed
 
     private void btnBloqueosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBloqueosActionPerformed
-        // TODO add your handling code here:
-        // En tu método btnBloqueosActionPerformed de Administrador_Equipos:
+
         String nombreLab = this.lbllaboratorionombre.getText();
         Administrador_Bloqueos panelBloqueos = new Administrador_Bloqueos(nombreLab);
 
-        // 2. Creamos el contenedor (ventana)
         javax.swing.JFrame frame = new javax.swing.JFrame("Administración de Bloqueos");
 
-        // 3. Configuramos la ventana
-        frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE); // Solo cierra esta ventana, no todo el programa
+        frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
         frame.add(panelBloqueos);
-        frame.pack(); // Ajusta el tamaño de la ventana al tamaño del panel
-        frame.setLocationRelativeTo(null); // Centra la ventana en pantalla
-        frame.setResizable(false); // Recomendado para que el diseño no se rompa
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
 
-        // 4. Mostramos
         frame.setVisible(true);
         this.dispose();
 

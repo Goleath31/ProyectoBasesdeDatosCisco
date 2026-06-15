@@ -5,29 +5,25 @@
 package dtos;
 
 /**
- *
- * @author golea
+ * Contiene la información necesaria para realizar el desbloqueo de una computadora.
+ * * @author golea
  */
 public class DesbloqueoEquipoDTO {
     private int idComputadora;
     private String contrasenaMaestra;
 
-    public DesbloqueoEquipoDTO() {
-    }
+    /** Constructor por defecto. */
+    public DesbloqueoEquipoDTO() {}
 
-    public int getIdComputadora() {
-        return idComputadora;
-    }
+    /** @return ID de la computadora a desbloquear. */
+    public int getIdComputadora() { return idComputadora; }
 
-    public void setIdComputadora(int idComputadora) {
-        this.idComputadora = idComputadora;
-    }
+    /** @param idComputadora ID de la computadora. */
+    public void setIdComputadora(int idComputadora) { this.idComputadora = idComputadora; }
 
-    public String getContrasenaMaestra() {
-        return contrasenaMaestra;
-    }
+    /** @return Contraseña maestra para validación de desbloqueo. */
+    public String getContrasenaMaestra() { return contrasenaMaestra; }
 
-    public void setContrasenaMaestra(String contrasenaMaestra) {
-        this.contrasenaMaestra = contrasenaMaestra;
-    }
+    /** @param contrasenaMaestra Contraseña a establecer. */
+    public void setContrasenaMaestra(String contrasenaMaestra) { this.contrasenaMaestra = contrasenaMaestra; }
 }

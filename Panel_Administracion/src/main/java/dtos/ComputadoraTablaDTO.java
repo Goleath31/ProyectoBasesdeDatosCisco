@@ -5,24 +5,38 @@
 package dtos;
 
 /**
+ * Objeto de transferencia de datos para visualizar el estado de las
+ * computadoras en una tabla.
  *
- * @author golea
+ * * @author golea
  */
 public class ComputadoraTablaDTO {
+
     private int idComputadora;
     private int numeroMaquina;
     private String direccionIp;
     private String estatus;
 
+    /**
+     * Constructor por defecto.
+     */
     public ComputadoraTablaDTO() {
     }
-    
+
+    /**
+     * Constructor con todos los campos.
+     *
+     * @param idComputadora ID único de la computadora.
+     * @param numeroMaquina Número físico de la máquina.
+     * @param direccionIp Dirección IP asignada.
+     * @param estatus Estado actual (ej. Activo, Bloqueado).
+     */
     public ComputadoraTablaDTO(int idComputadora, int numeroMaquina, String direccionIp, String estatus) {
-    this.idComputadora = idComputadora;
-    this.numeroMaquina = numeroMaquina;
-    this.direccionIp = direccionIp;
-    this.estatus = estatus;
-}
+        this.idComputadora = idComputadora;
+        this.numeroMaquina = numeroMaquina;
+        this.direccionIp = direccionIp;
+        this.estatus = estatus;
+    }
 
     public int getIdComputadora() {
         return idComputadora;

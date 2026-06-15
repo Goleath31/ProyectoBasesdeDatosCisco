@@ -56,13 +56,12 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     public void cargarTablaAlumnosBloqueados() {
         try {
             String criterio = txtbuscar.getText().trim();
-            // Asegúrate de que los parámetros de paginación sean correctos
             List<AlumnoBloqueadoTablaDTO> lista = this.alumnoNegocio.obtenerAlumnosBloqueadosPaginados(
                     criterio, this.paginaActual, this.REGISTROS_POR_PAGINA
             );
 
             DefaultTableModel modelo = (DefaultTableModel) tabladesbloqueos.getModel();
-            modelo.setRowCount(0); // Limpia la tabla
+            modelo.setRowCount(0);
 
             for (AlumnoBloqueadoTablaDTO alumno : lista) {
                 Object[] fila = {
@@ -74,7 +73,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 modelo.addRow(fila);
             }
 
-            // Actualizamos la etiqueta de paginación
             btnpaginas.setText("Mostrando página " + paginaActual + " de " + totalPaginas);
 
         } catch (NegocioException e) {
@@ -534,10 +532,11 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                             .addComponent(lblmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblbuscaralumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnfiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtbuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cbxmotivos, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnfiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(btnrestaurartabla, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(contenidopanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -608,30 +607,26 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         int id = Integer.parseInt(txtidalumno.getText());
         String motivo = txtmotivo.getText();
 
-        // 1. Validaciones básicas antes de abrir el diálogo
         if (motivo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, llene los campos de ID y motivo.");
             return;
         }
 
-        // 2. Crear panel de confirmación
         Confirmacion_bloqueo_alumno panelConfirmacion = new Confirmacion_bloqueo_alumno(
                 this.alumnoNegocio, id, "Nombre del Alumno", motivo
         );
 
-        // 3. Crear y configurar el JDialog
         javax.swing.JDialog dialog = new javax.swing.JDialog(
                 (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this),
                 "Confirmar Bloqueo",
                 true
         );
         dialog.getContentPane().add(panelConfirmacion);
-        panelConfirmacion.setDialogPadre(dialog); // Pasar referencia para cerrar
+        panelConfirmacion.setDialogPadre(dialog);
         dialog.pack();
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
 
-        // 4. Refrescar la tabla tras cerrar el diálogo
         cargarTablaAlumnosBloqueados();
     }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
 

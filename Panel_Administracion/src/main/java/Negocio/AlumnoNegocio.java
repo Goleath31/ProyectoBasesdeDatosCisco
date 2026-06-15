@@ -9,21 +9,24 @@ import Persistencia.PersistenciaException;
 import dtos.AlumnoBloqueadoTablaDTO;
 import dtos.BloqueoAlumnoDTO;
 import java.util.List;
-
 /**
- *
- * @author golea
+ * Implementación de la lógica de negocio para la gestión de alumnos bloqueados.
  */
 public class AlumnoNegocio implements IAlumnoNegocio {
 
     private final IAlumnoDAO alumnoDAO;
 
+    /**
+     * Inyecta la dependencia del DAO de alumnos.
+     * @param alumnoDAO Implementación de acceso a datos.
+     */
     public AlumnoNegocio(IAlumnoDAO alumnoDAO) {
         this.alumnoDAO = alumnoDAO;
     }
 
     @Override
     public boolean bloquearAlumno(BloqueoAlumnoDTO bloqueoDTO) throws NegocioException {
+        // Valida que los campos obligatorios no sean nulos o vacíos
         if (bloqueoDTO.getMatricula() == null || bloqueoDTO.getMatricula().trim().isEmpty()) {
             throw new NegocioException("La matrícula del alumno es obligatoria.");
         }
@@ -48,16 +51,13 @@ public class AlumnoNegocio implements IAlumnoNegocio {
     }
 
     @Override
-    public int calcularTotalPaginas(int idLaboratorio, String criterio,
-            int registrosPorPagina) throws NegocioException {
+    public int calcularTotalPaginas(int idLaboratorio, String criterio, int registrosPorPagina) throws NegocioException {
         if (idLaboratorio <= 0 || registrosPorPagina <= 0) {
             return 1;
         }
         try {
             int totalRegistros = alumnoDAO.contarAlumnosBloqueados(idLaboratorio, criterio);
-            if (totalRegistros == 0) {
-                return 1;
-            }
+            if (totalRegistros == 0) return 1;
             return (int) Math.ceil((double) totalRegistros / registrosPorPagina);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error de negocio al calcular la paginación de bloqueos.", e);
