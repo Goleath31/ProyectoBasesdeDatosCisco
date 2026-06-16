@@ -47,4 +47,5 @@ public interface IAlumnoNegocio {
      * @throws NegocioException Si hay error en el cálculo.
      */
     int calcularTotalPaginas(int idLaboratorio, String criterio, int registrosPorPagina) throws NegocioException;
+    int obtenerTotalBloqueados(int idLaboratorio, String criterio) throws NegocioException;
 }

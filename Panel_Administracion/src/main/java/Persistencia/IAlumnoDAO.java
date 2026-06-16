@@ -10,15 +10,19 @@ import java.util.List;
 
 /**
  * Define las operaciones de persistencia permitidas para la entidad Alumno.
+ *
  * * @author golea
  */
 public interface IAlumnoDAO {
 
     /**
      * Registra el bloqueo de un alumno en el sistema.
-     * * @param bloqueoDTO Datos necesarios para registrar el bloqueo (matrícula y motivo).
+     *
+     * * @param bloqueoDTO Datos necesarios para registrar el bloqueo (id y
+     * motivo).
      * @return true si el registro fue exitoso, false en caso contrario.
-     * @throws PersistenciaException Si ocurre un error en la capa de persistencia.
+     * @throws PersistenciaException Si ocurre un error en la capa de
+     * persistencia.
      */
     boolean registrarBloqueoAlumno(BloqueoAlumnoDTO bloqueoDTO) throws PersistenciaException;
 
@@ -44,4 +48,7 @@ public interface IAlumnoDAO {
      * @throws PersistenciaException Si la consulta falla.
      */
     public List<AlumnoBloqueadoTablaDTO> obtenerAlumnosBloqueadosGlobal(String criterio, int pagina, int registros) throws PersistenciaException;
+
+    public boolean existeAlumno(int idAlumno) throws PersistenciaException;
+    
 }

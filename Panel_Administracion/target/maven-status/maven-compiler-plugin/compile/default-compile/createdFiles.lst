@@ -4,6 +4,7 @@ Presentacion\Confirmacion_Bloqueo_Equipos.class
 Presentacion\Administrador_Desbloqueos$1.class
 Presentacion\Administrador_Desbloqueos$4.class
 Presentacion\Administrador_Equipos$3.class
+Presentacion\Confirmacion_bloqueo_alumno$2.class
 Presentacion\Confirmacion_Desbloqueo_Equipo$2.class
 Presentacion\Administrador_Bloqueos$7.class
 Persistencia\ConexionBD.class
@@ -31,6 +32,7 @@ dtos\BloqueoAlumnoDTO.class
 Presentacion\Administrador_Equipos$5.class
 Entidad\BloqueoEntidad.class
 dtos\ComputadoraTablaDTO.class
+Presentacion\Administrador_Bloqueos$9.class
 Persistencia\PersistenciaException.class
 Presentacion\Administrador_Equipos$10.class
 Entidad\LaboratorioEntidad.class

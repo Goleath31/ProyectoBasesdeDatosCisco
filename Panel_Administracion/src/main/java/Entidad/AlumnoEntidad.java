@@ -9,7 +9,7 @@ package Entidad;
  * @author golea
  */
 public class AlumnoEntidad {
-    private String id;
+    private int id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -20,11 +20,11 @@ public class AlumnoEntidad {
     public AlumnoEntidad() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

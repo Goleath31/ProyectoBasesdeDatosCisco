@@ -27,7 +27,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
     private int paginaActual = 1;
     private int totalPaginas = 1;
-    private final int REGISTROS_POR_PAGINA = 5;
+    private final int REGISTROS_POR_PAGINA = 10;
     private final IAlumnoNegocio alumnoNegocio;
     private int idLaboratorioActual = 0;
     private String nombreLaboratorio;
@@ -73,10 +73,24 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 modelo.addRow(fila);
             }
 
+            actualizarContadorBloqueados();
             btnpaginas.setText("Mostrando página " + paginaActual + " de " + totalPaginas);
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar la tabla: " + e.getMessage());
+        }
+    }
+
+    public void actualizarContadorBloqueados() {
+        try {
+            String criterio = txtbuscar.getText().trim();
+            // Llamamos al método recién creado en la capa de negocio
+            int total = this.alumnoNegocio.obtenerTotalBloqueados(this.idLaboratorioActual, criterio);
+
+            // Actualizamos el JLabel lblbloqueados
+            lblnumbloqueados.setText(String.valueOf(total));
+        } catch (NegocioException e) {
+            System.err.println("Error al actualizar el contador: " + e.getMessage());
         }
     }
 
@@ -92,7 +106,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         panelfondo = new javax.swing.JPanel();
         contendeorizquierdo = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnEqupos = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         contenedorsuperior = new javax.swing.JPanel();
@@ -104,7 +118,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         contenedorcontenido = new javax.swing.JPanel();
         contenedortotalbloqueos = new javax.swing.JPanel();
         lbltotalbloqueos = new javax.swing.JLabel();
-        lblbloqueados = new javax.swing.JLabel();
+        lblnumbloqueados = new javax.swing.JLabel();
         contenidopanel = new javax.swing.JPanel();
         lblmotivos = new javax.swing.JLabel();
         cbxmotivos = new javax.swing.JComboBox<>();
@@ -132,15 +146,20 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
         contendeorizquierdo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 226, 226), 2, true));
 
-        jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(102, 102, 102));
-        jButton1.setText("Equipos");
-        jButton1.setBorder(null);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jButton1.setInheritsPopupMenu(true);
+        btnEqupos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnEqupos.setForeground(new java.awt.Color(102, 102, 102));
+        btnEqupos.setText("Equipos");
+        btnEqupos.setBorder(null);
+        btnEqupos.setContentAreaFilled(false);
+        btnEqupos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnEqupos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEqupos.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnEqupos.setInheritsPopupMenu(true);
+        btnEqupos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEquposActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(102, 102, 102));
@@ -169,7 +188,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEqupos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -178,7 +197,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEqupos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
@@ -276,10 +295,10 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         lbltotalbloqueos.setForeground(new java.awt.Color(93, 95, 95));
         lbltotalbloqueos.setText("TOTAL BLOQUEADOS");
 
-        lblbloqueados.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblbloqueados.setForeground(new java.awt.Color(0, 86, 150));
-        lblbloqueados.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblbloqueados.setText("300");
+        lblnumbloqueados.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblnumbloqueados.setForeground(new java.awt.Color(0, 86, 150));
+        lblnumbloqueados.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblnumbloqueados.setText("300");
 
         javax.swing.GroupLayout contenedortotalbloqueosLayout = new javax.swing.GroupLayout(contenedortotalbloqueos);
         contenedortotalbloqueos.setLayout(contenedortotalbloqueosLayout);
@@ -288,7 +307,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
             .addGroup(contenedortotalbloqueosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contenedortotalbloqueosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblbloqueados, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblnumbloqueados, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbltotalbloqueos))
                 .addContainerGap(84, Short.MAX_VALUE))
         );
@@ -298,7 +317,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbltotalbloqueos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblbloqueados)
+                .addComponent(lblnumbloqueados)
                 .addGap(37, 37, 37))
         );
 
@@ -603,31 +622,41 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     }//GEN-LAST:event_btnrestaurartablaActionPerformed
 
     private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
-        // TODO add your handling code here:
-        int id = Integer.parseInt(txtidalumno.getText());
-        String motivo = txtmotivo.getText();
+        try {
+            // 1. Obtener datos de los campos
+            String idTexto = txtidalumno.getText().trim();
+            String motivo = txtmotivo.getText().trim();
 
-        if (motivo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, llene los campos de ID y motivo.");
-            return;
+            if (idTexto.isEmpty() || motivo.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, llene el ID del alumno y el motivo.");
+                return;
+            }
+
+            int idAlumno = Integer.parseInt(idTexto);
+
+            // Asumiendo que necesitas el nombre del alumno, aquí podrías buscarlo mediante alumnoNegocio.
+            // Por ahora, pasaremos "Alumno" como placeholder si no tienes una consulta rápida.
+            String nombreAlumno = "Alumno " + idAlumno;
+
+            // 2. Crear el panel de confirmación
+            Confirmacion_bloqueo_alumno panelConfirmacion = new Confirmacion_bloqueo_alumno(
+                    this.alumnoNegocio, idAlumno, nombreAlumno, motivo
+            );
+
+            // 3. Crear el JDialog
+            javax.swing.JDialog dialog = new javax.swing.JDialog((javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(this), "Confirmar Bloqueo", true);
+            dialog.getContentPane().add(panelConfirmacion);
+            panelConfirmacion.setDialogPadre(dialog); // Pasamos la referencia para que el panel pueda cerrarlo
+            dialog.pack();
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+
+            // 4. Actualizar tabla después de cerrar el diálogo
+            cargarTablaAlumnosBloqueados();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID del alumno debe ser un número válido.");
         }
-
-        Confirmacion_bloqueo_alumno panelConfirmacion = new Confirmacion_bloqueo_alumno(
-                this.alumnoNegocio, id, "Nombre del Alumno", motivo
-        );
-
-        javax.swing.JDialog dialog = new javax.swing.JDialog(
-                (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this),
-                "Confirmar Bloqueo",
-                true
-        );
-        dialog.getContentPane().add(panelConfirmacion);
-        panelConfirmacion.setDialogPadre(dialog);
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-
-        cargarTablaAlumnosBloqueados();
     }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
 
     private void btnizquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnizquierdaActionPerformed
@@ -648,8 +677,8 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
     private void btnderechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnderechaActionPerformed
         // TODO add your handling code here:
-        if (this.paginaActual < totalPaginas) {
-            this.paginaActual++;
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
             cargarTablaAlumnosBloqueados();
         }
     }//GEN-LAST:event_btnderechaActionPerformed
@@ -659,8 +688,25 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
     }//GEN-LAST:event_txtbuscarActionPerformed
 
+    private void btnEquposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEquposActionPerformed
+        // TODO add your handling code here:
+
+        Administrador_Equipos ventanaEquipos = new Administrador_Equipos();
+
+        // 2. Hacer visible la nueva ventana
+        ventanaEquipos.setVisible(true);
+
+        // 3. Opcional: Cerrar la ventana actual si es un JFrame
+        // Si Administrador_Bloqueos vive dentro de un JFrame, puedes obtenerlo así:
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (win != null) {
+            win.dispose(); // Esto cierra la ventana donde está contenido este JPanel
+        }
+    }//GEN-LAST:event_btnEquposActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEqupos;
     private javax.swing.JButton btnaplicarbloqueo;
     private javax.swing.JButton btnderecha;
     private javax.swing.JButton btnfiltrar;
@@ -675,7 +721,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     private javax.swing.JPanel contenedorsuperior;
     private javax.swing.JPanel contenedortotalbloqueos;
     private javax.swing.JPanel contenidopanel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel4;
@@ -683,12 +728,12 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbladmin;
-    private javax.swing.JLabel lblbloqueados;
     private javax.swing.JLabel lblbuscaralumnos;
     private javax.swing.JLabel lblidalumno;
     private javax.swing.JLabel lbllaboratorio;
     private javax.swing.JLabel lblmotivo;
     private javax.swing.JLabel lblmotivos;
+    private javax.swing.JLabel lblnumbloqueados;
     private javax.swing.JLabel lbltitulo;
     private javax.swing.JLabel lbltituloaplicarbloqueo;
     private javax.swing.JLabel lbltotalbloqueos;

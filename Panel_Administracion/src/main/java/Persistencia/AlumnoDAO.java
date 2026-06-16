@@ -33,29 +33,25 @@ public class AlumnoDAO implements IAlumnoDAO {
     }
 
     /**
-     * Actualiza el estatus de un alumno a 'Bloqueado' y registra el motivo.
+     * Actualiza el estatus del alumno a 'Bloqueado' e inserta un registro en la
+     * tabla Bloqueo de forma transaccional.
      *
-     * * @param bloqueoDTO DTO con la información de la matrícula y motivo del
-     * bloqueo.
-     * @return true si se actualizó al menos un registro, false en caso
-     * contrario.
-     * @throws PersistenciaException Si ocurre un error en la capa de
-     * persistencia.
+     * @param bloqueoDTO DTO con la información necesaria (idAlumno y motivo).
+     * @return true si ambos procesos se ejecutaron exitosamente.
+     * @throws PersistenciaException Si ocurre un error en la base de datos.
      */
     @Override
-    public boolean registrarBloqueoAlumno(BloqueoAlumnoDTO bloqueoDTO) throws PersistenciaException {
-        String sentenciaSQL = "UPDATE Alumno SET estatus = 'Bloqueado', motivo_bloqueo = ? WHERE matricula = ?;";
+    public boolean registrarBloqueoAlumno(BloqueoAlumnoDTO dto) throws PersistenciaException {
+        String sql = "INSERT INTO Bloqueo (id_alumno, motivo, fecha_bloqueo) VALUES (?, ?, ?)";
+        try (Connection conn = this.conexion.crearConexion(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try (Connection conn = this.conexion.crearConexion(); PreparedStatement comando = conn.prepareStatement(sentenciaSQL)) {
+            ps.setString(1, dto.getIdAlumno()); // Enviamos el String "0000024006"
+            ps.setString(2, dto.getMotivo());
+            ps.setDate(3, dto.getFecha());
 
-            comando.setString(1, bloqueoDTO.getMotivo());
-            comando.setString(2, bloqueoDTO.getMatricula());
-
-            int filasAfectadas = comando.executeUpdate();
-            return filasAfectadas > 0;
-
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new PersistenciaException("Error al registrar el bloqueo del alumno en la base de datos: " + e.getMessage());
+            throw new PersistenciaException("Error al registrar: " + e.getMessage());
         }
     }
 
@@ -136,4 +132,21 @@ public class AlumnoDAO implements IAlumnoDAO {
         }
         return 0;
     }
+
+    public boolean existeAlumno(int idAlumno) throws PersistenciaException {
+        String sql = "SELECT COUNT(*) FROM Alumno WHERE id = ?";
+        try (Connection conn = this.conexion.crearConexion(); PreparedStatement comando = conn.prepareStatement(sql)) {
+
+            comando.setInt(1, idAlumno);
+            try (ResultSet rs = comando.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al verificar existencia del alumno: " + e.getMessage());
+        }
+        return false;
+    }
+
 }

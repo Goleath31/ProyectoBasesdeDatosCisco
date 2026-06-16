@@ -4,6 +4,8 @@
  */
 package dtos;
 
+import java.sql.Date;
+
 /**
  * Contiene los datos necesarios para procesar el bloqueo de un alumno.
  *
@@ -11,9 +13,9 @@ package dtos;
  */
 public class BloqueoAlumnoDTO {
 
-    private int idAlumno;
-    private String matricula;
+    private String idAlumno;
     private String motivo;
+    private Date Fecha;
 
     /**
      * Constructor por defecto.
@@ -24,41 +26,25 @@ public class BloqueoAlumnoDTO {
     /**
      * Constructor para bloqueo completo.
      *
-     * @param idAlumno ID del alumno.
-     * @param matricula Matrícula institucional.
-     * @param motivo Razón del bloqueo.
-     */
-    public BloqueoAlumnoDTO(int idAlumno, String matricula, String motivo) {
-        this.idAlumno = idAlumno;
-        this.matricula = matricula;
-        this.motivo = motivo;
-    }
-
-    /**
+     *
+     * /**
      * Constructor simplificado.
      *
      * @param idAlumno ID del alumno.
      * @param motivo Razón del bloqueo.
      */
-    public BloqueoAlumnoDTO(int idAlumno, String motivo) {
-        this.idAlumno = idAlumno;
+    public BloqueoAlumnoDTO(String idAlumno, String motivo) {
+        this.idAlumno = String.format("%010d", Integer.parseInt(idAlumno));
         this.motivo = motivo;
+        this.Fecha = new java.sql.Date(System.currentTimeMillis());
     }
 
-    public int getIdAlumno() {
+    public String getIdAlumno() {
         return idAlumno;
     }
 
-    public void setIdAlumno(int idAlumno) {
+    public void setIdAlumno(String idAlumno) {
         this.idAlumno = idAlumno;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
     }
 
     public String getMotivo() {
@@ -68,4 +54,16 @@ public class BloqueoAlumnoDTO {
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
+
+    public Date getFecha() {
+        return Fecha;
+    }
+
+    public void setFecha(Date Fecha) {
+        this.Fecha = Fecha;
+    }
+
+    
+    
+    
 }

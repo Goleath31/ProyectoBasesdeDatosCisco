@@ -9,6 +9,7 @@ import Persistencia.PersistenciaException;
 import dtos.AlumnoBloqueadoTablaDTO;
 import dtos.BloqueoAlumnoDTO;
 import java.util.List;
+
 /**
  * Implementación de la lógica de negocio para la gestión de alumnos bloqueados.
  */
@@ -18,6 +19,7 @@ public class AlumnoNegocio implements IAlumnoNegocio {
 
     /**
      * Inyecta la dependencia del DAO de alumnos.
+     *
      * @param alumnoDAO Implementación de acceso a datos.
      */
     public AlumnoNegocio(IAlumnoDAO alumnoDAO) {
@@ -26,18 +28,16 @@ public class AlumnoNegocio implements IAlumnoNegocio {
 
     @Override
     public boolean bloquearAlumno(BloqueoAlumnoDTO bloqueoDTO) throws NegocioException {
-        // Valida que los campos obligatorios no sean nulos o vacíos
-        if (bloqueoDTO.getMatricula() == null || bloqueoDTO.getMatricula().trim().isEmpty()) {
-            throw new NegocioException("La matrícula del alumno es obligatoria.");
-        }
-        if (bloqueoDTO.getMotivo() == null || bloqueoDTO.getMotivo().trim().isEmpty()) {
-            throw new NegocioException("Debe especificar un motivo para el bloqueo.");
-        }
-
         try {
+            // Validamos que el ID sea numérico antes de intentar cualquier operación
+            Integer.parseInt(bloqueoDTO.getIdAlumno());
+
+            // Aquí puedes agregar la llamada a existeAlumno(bloqueoDTO.getIdAlumno())
             return alumnoDAO.registrarBloqueoAlumno(bloqueoDTO);
+        } catch (NumberFormatException e) {
+            throw new NegocioException("El formato del ID es inválido.");
         } catch (PersistenciaException e) {
-            throw new NegocioException("Error en las reglas de negocio al bloquear alumno.", e);
+            throw new NegocioException("Error de base de datos.", e);
         }
     }
 
@@ -57,10 +57,20 @@ public class AlumnoNegocio implements IAlumnoNegocio {
         }
         try {
             int totalRegistros = alumnoDAO.contarAlumnosBloqueados(idLaboratorio, criterio);
-            if (totalRegistros == 0) return 1;
+            if (totalRegistros == 0) {
+                return 1;
+            }
             return (int) Math.ceil((double) totalRegistros / registrosPorPagina);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error de negocio al calcular la paginación de bloqueos.", e);
+        }
+    }
+
+    public int obtenerTotalBloqueados(int idLaboratorio, String criterio) throws NegocioException {
+        try {
+            return alumnoDAO.contarAlumnosBloqueados(idLaboratorio, criterio);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al obtener el total de bloqueados", e);
         }
     }
 }

@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
  *
  * @author golea
  */
-
 public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
 
     private IAlumnoNegocio alumnoNegocio;
@@ -29,13 +28,16 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
         this.idAlumno = idAlumno;
         this.motivo = motivo;
 
-        String mensaje = "¿Está seguro de que desea aplicar un bloqueo al alumno " + nombreAlumno 
-                       + " por el motivo: " + motivo + "?\n\n" 
-                       + "El estudiante no podrá utilizar ningún equipo de laboratorio hasta que el bloqueo sea removido.";
+        String mensaje = "¿Está seguro de que desea aplicar un bloqueo al alumno " + nombreAlumno
+                + " por el motivo: " + motivo + "?\n\n"
+                + "El estudiante no podrá utilizar ningún equipo de laboratorio hasta que el bloqueo sea removido.";
         jTextArea1.setText(mensaje);
     }
 
-    public void setDialogPadre(javax.swing.JDialog dialog) { this.dialogPadre = dialog; }
+    public void setDialogPadre(javax.swing.JDialog dialog) {
+        this.dialogPadre = dialog;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,6 +73,11 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
         btnaplicarbloqueo1.setText("Cancelar");
         btnaplicarbloqueo1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(93, 95, 95), 2, true));
         btnaplicarbloqueo1.setOpaque(true);
+        btnaplicarbloqueo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueo1ActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -115,17 +122,29 @@ public class Confirmacion_bloqueo_alumno extends javax.swing.JPanel {
     private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
         // TODO add your handling code here:
         try {
-            BloqueoAlumnoDTO dto = new BloqueoAlumnoDTO(this.idAlumno, this.motivo);
+            // Asegúrate de que idAlumno se pase como String desde la pantalla anterior
+            // Si tienes el valor numérico, conviértelo aquí:
+            String idFormateado = String.format("%010d", this.idAlumno);
+
+            BloqueoAlumnoDTO dto = new BloqueoAlumnoDTO(idFormateado, this.motivo);
             alumnoNegocio.bloquearAlumno(dto);
-            JOptionPane.showMessageDialog(this, "Alumno bloqueado correctamente.");
+
+            JOptionPane.showMessageDialog(this, "Alumno bloqueado exitosamente.");
             if (dialogPadre != null) {
-                dialogPadre.dispose(); 
+                dialogPadre.dispose();
             }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-    
     }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
+
+    private void btnaplicarbloqueo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueo1ActionPerformed
+        // TODO add your handling code here:
+        if (dialogPadre != null) {
+            dialogPadre.dispose();
+        }
+    }//GEN-LAST:event_btnaplicarbloqueo1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

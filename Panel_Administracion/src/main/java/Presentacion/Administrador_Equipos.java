@@ -46,10 +46,9 @@ public class Administrador_Equipos extends javax.swing.JFrame {
             };
             tabladeequipos.setModel(modeloCuatroColumnas);
         }
-        IConexionBD conexionBD = new ConexionBD(); 
+        IConexionBD conexionBD = new ConexionBD();
         IComputadoraDAO computadoraDAO = new ComputadoraDAO(conexionBD);
         this.computadoraNegocio = new ComputadoraNegocio(computadoraDAO);
-
         this.inicializarPanelAdministrador();
 
     }
@@ -58,7 +57,8 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         try {
             String ipLocal = InetAddress.getLocalHost().getHostAddress();
             System.out.println("IP detectada de la máquina: " + ipLocal);
-            /*midificar si hacen pruebas*/ipLocal = "192.168.2.3";
+            /*midificar si hacen pruebas*/
+            ipLocal = "192.168.2.3";
 
             ComputadoraTablaDTO labInfo = computadoraNegocio.obtenerIdLaboratorioPorIP(ipLocal);
 
@@ -89,7 +89,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         }
     }
 
-    
     private void cargarTablaComputadoras() {
         try {
             if (tabladeequipos == null) {
@@ -97,7 +96,7 @@ public class Administrador_Equipos extends javax.swing.JFrame {
             }
 
             DefaultTableModel modeloTabla = (DefaultTableModel) tabladeequipos.getModel();
-            modeloTabla.setRowCount(0); 
+            modeloTabla.setRowCount(0);
             List<ComputadoraTablaDTO> listaEquipos = computadoraNegocio.obtenerComputadorasPorLaboratorio(idLaboratorioActual);
 
             if (listaEquipos != null) {
@@ -116,7 +115,6 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         }
     }
 
-    
     private void actualizarMetricasUso() {
         try {
             if (lblnumeroenuso != null) {
@@ -788,7 +786,7 @@ public class Administrador_Equipos extends javax.swing.JFrame {
 
         dialogo.getContentPane().add(panelBloqueo);
         dialogo.pack();
-        dialogo.setLocationRelativeTo(this); 
+        dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
 
     }//GEN-LAST:event_btnbloquearequipoActionPerformed
@@ -803,7 +801,7 @@ public class Administrador_Equipos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtcontraseñaActionPerformed
 
     private void btnfltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfltrarActionPerformed
-   
+
         this.paginaActual = 1;
         this.cargarTablaComputadorasPaginada();
     }//GEN-LAST:event_btnfltrarActionPerformed
