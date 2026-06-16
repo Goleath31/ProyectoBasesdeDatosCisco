@@ -66,6 +66,11 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
         btnaplicarbloqueo1.setText("Cancelar");
         btnaplicarbloqueo1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(93, 95, 95), 2, true));
         btnaplicarbloqueo1.setOpaque(true);
+        btnaplicarbloqueo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueo1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -167,13 +172,16 @@ public class Confirmacion_Bloqueo_Equipos extends javax.swing.JPanel {
         } catch (Negocio.NegocioException e) {
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Validación de Bloqueo", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-    }
+   
+        
+    }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
 
-    private void btnaplicarbloqueo1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnaplicarbloqueo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueo1ActionPerformed
+        // TODO add your handling code here:
         if (dialogoContenedor != null) {
             dialogoContenedor.dispose();
         }
-    }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
+    }//GEN-LAST:event_btnaplicarbloqueo1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

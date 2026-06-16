@@ -4,17 +4,40 @@
  */
 package Presentacion;
 
+import Negocio.IAlumnoNegocio;
+import dtos.AlumnoDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author golea
  */
 public class Confirmacion_Debloqueo_alumno extends javax.swing.JPanel {
 
+    private IAlumnoNegocio alumnoNegocio;
+    private int idAlumno;
+    private javax.swing.JDialog dialogPadre;
+
     /**
      * Creates new form Confirmacion_Debloqueo_alumno
      */
-    public Confirmacion_Debloqueo_alumno() {
+    public Confirmacion_Debloqueo_alumno(IAlumnoNegocio negocio, int idAlumno) {
         initComponents();
+        this.alumnoNegocio = negocio;
+        this.idAlumno = idAlumno;
+        buscarYConfigurarMensaje();
+    }
+
+    private void buscarYConfigurarMensaje() {
+        try {
+            // Asumiendo que tienes un método para obtener el alumno por ID
+            AlumnoDTO alumno = alumnoNegocio.obtenerAlumnoPorId(idAlumno);
+            String mensaje = "¿Está seguro de que desea restaurar el acceso al alumno " + alumno.getNombre()
+                    + " con ID " + idAlumno + "?\n\nEsta acción permitirá al estudiante utilizar los laboratorios de nuevo.";
+            jTextArea1.setText(mensaje);
+        } catch (Exception e) {
+            jTextArea1.setText("Error al cargar datos del alumno.");
+        }
     }
 
     /**
@@ -51,12 +74,22 @@ public class Confirmacion_Debloqueo_alumno extends javax.swing.JPanel {
         btnaplicarbloqueo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo.setForeground(new java.awt.Color(255, 255, 255));
         btnaplicarbloqueo.setText("Confirmar Desbloqueo");
+        btnaplicarbloqueo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueoActionPerformed(evt);
+            }
+        });
 
         btnaplicarbloqueo1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnaplicarbloqueo1.setForeground(new java.awt.Color(93, 95, 95));
         btnaplicarbloqueo1.setText("Cancelar");
         btnaplicarbloqueo1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(93, 95, 95), 2, true));
         btnaplicarbloqueo1.setOpaque(true);
+        btnaplicarbloqueo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaplicarbloqueo1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -85,6 +118,27 @@ public class Confirmacion_Debloqueo_alumno extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnaplicarbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueoActionPerformed
+        // TODO add your handling code here:
+        try {
+            alumnoNegocio.eliminarBloqueo(idAlumno);
+            JOptionPane.showMessageDialog(this, "Alumno desbloqueado exitosamente.");
+            if (dialogPadre != null) {
+                dialogPadre.dispose();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnaplicarbloqueoActionPerformed
+
+    private void btnaplicarbloqueo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicarbloqueo1ActionPerformed
+        // TODO add your handling code here:
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (win != null) {
+            win.dispose();
+        }
+    }//GEN-LAST:event_btnaplicarbloqueo1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

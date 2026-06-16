@@ -107,7 +107,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
         contendeorizquierdo = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         btnEqupos = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnDesbloqueados = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         contenedorsuperior = new javax.swing.JPanel();
         lbltitulo = new javax.swing.JLabel();
@@ -161,16 +161,21 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(102, 102, 102));
-        jButton2.setText("Desbloqueos");
-        jButton2.setBorder(null);
-        jButton2.setContentAreaFilled(false);
-        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jButton2.setMaximumSize(new java.awt.Dimension(46, 14));
-        jButton2.setMinimumSize(new java.awt.Dimension(46, 14));
-        jButton2.setPreferredSize(new java.awt.Dimension(46, 14));
+        btnDesbloqueados.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnDesbloqueados.setForeground(new java.awt.Color(102, 102, 102));
+        btnDesbloqueados.setText("Desbloqueos");
+        btnDesbloqueados.setBorder(null);
+        btnDesbloqueados.setContentAreaFilled(false);
+        btnDesbloqueados.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDesbloqueados.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnDesbloqueados.setMaximumSize(new java.awt.Dimension(46, 14));
+        btnDesbloqueados.setMinimumSize(new java.awt.Dimension(46, 14));
+        btnDesbloqueados.setPreferredSize(new java.awt.Dimension(46, 14));
+        btnDesbloqueados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesbloqueadosActionPerformed(evt);
+            }
+        });
 
         jLabel7.setBackground(new java.awt.Color(226, 226, 226));
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -185,7 +190,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(btnDesbloqueados, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnEqupos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -201,7 +206,7 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDesbloqueados, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -697,12 +702,26 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
         java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (win != null) {
-            win.dispose(); // Esto cierra la ventana donde está contenido este JPanel
+            win.dispose();
         }
     }//GEN-LAST:event_btnEquposActionPerformed
 
+    private void btnDesbloqueadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesbloqueadosActionPerformed
+        // TODO add your handling code here:
+        javax.swing.JFrame framePrincipal = (javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        Administrador_Desbloqueos panel = new Administrador_Desbloqueos(this.nombreLaboratorio);
+        panel.setSize(framePrincipal.getSize());
+
+        framePrincipal.getContentPane().removeAll();
+        framePrincipal.getContentPane().add(panel);
+        framePrincipal.revalidate();
+        framePrincipal.repaint();
+    }//GEN-LAST:event_btnDesbloqueadosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDesbloqueados;
     private javax.swing.JButton btnEqupos;
     private javax.swing.JButton btnaplicarbloqueo;
     private javax.swing.JButton btnderecha;
@@ -718,7 +737,6 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
     private javax.swing.JPanel contenedorsuperior;
     private javax.swing.JPanel contenedortotalbloqueos;
     private javax.swing.JPanel contenidopanel;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel9;

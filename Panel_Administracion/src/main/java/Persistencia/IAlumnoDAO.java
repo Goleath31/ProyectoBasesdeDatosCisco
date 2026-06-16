@@ -5,6 +5,7 @@
 package Persistencia;
 
 import dtos.AlumnoBloqueadoTablaDTO;
+import dtos.AlumnoDTO;
 import dtos.BloqueoAlumnoDTO;
 import java.util.List;
 
@@ -50,5 +51,9 @@ public interface IAlumnoDAO {
     public List<AlumnoBloqueadoTablaDTO> obtenerAlumnosBloqueadosGlobal(String criterio, int pagina, int registros) throws PersistenciaException;
 
     public boolean existeAlumno(int idAlumno) throws PersistenciaException;
-    
+
+    public boolean eliminarBloqueoAlumno(int idAlumno) throws PersistenciaException;
+
+    public AlumnoDTO obtenerAlumnoPorId(int idAlumno) throws PersistenciaException;
+
 }

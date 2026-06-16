@@ -7,6 +7,7 @@ package Negocio;
 import Persistencia.IAlumnoDAO;
 import Persistencia.PersistenciaException;
 import dtos.AlumnoBloqueadoTablaDTO;
+import dtos.AlumnoDTO;
 import dtos.BloqueoAlumnoDTO;
 import java.util.List;
 
@@ -71,6 +72,24 @@ public class AlumnoNegocio implements IAlumnoNegocio {
             return alumnoDAO.contarAlumnosBloqueados(idLaboratorio, criterio);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al obtener el total de bloqueados", e);
+        }
+    }
+
+    @Override
+    public void eliminarBloqueo(int idAlumno) throws NegocioException {
+        try {
+            alumnoDAO.eliminarBloqueoAlumno(idAlumno);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("No se pudo quitar el bloqueo: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public AlumnoDTO obtenerAlumnoPorId(int idAlumno) throws NegocioException {
+        try {
+            return alumnoDAO.obtenerAlumnoPorId(idAlumno);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al consultar alumno.", e);
         }
     }
 }

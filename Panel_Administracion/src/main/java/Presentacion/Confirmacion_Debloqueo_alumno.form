@@ -96,6 +96,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Confirmar Desbloqueo"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnaplicarbloqueoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnaplicarbloqueo1">
       <Properties>
@@ -115,6 +118,9 @@
         </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnaplicarbloqueo1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -4,6 +4,23 @@
  */
 package Presentacion;
 
+import Negocio.AlumnoNegocio;
+import Negocio.IAlumnoNegocio;
+import Negocio.NegocioException;
+import Persistencia.AlumnoDAO;
+import Persistencia.ComputadoraDAO;
+import Persistencia.ConexionBD;
+import Persistencia.IAlumnoDAO;
+import Persistencia.IComputadoraDAO;
+import Persistencia.IConexionBD;
+import dtos.AlumnoBloqueadoTablaDTO;
+import java.awt.Frame;
+import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author golea
@@ -11,6 +28,10 @@ package Presentacion;
 public class Administrador_Desbloqueos extends javax.swing.JPanel {
 
     private String nombreLaboratorio;
+    private int paginaActual = 1;
+    private final int REGISTROS_POR_PAGINA = 10;
+    private final IAlumnoNegocio alumnoNegocio;
+    private int idLaboratorioActual = 0;
 
     /**
      * Creates new form Administrador_Desbloqueos
@@ -21,6 +42,50 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
             lbllaboratorio.setText(nombreLab);
         }
         nombreLaboratorio = nombreLab;
+        IConexionBD conexionBD = new ConexionBD();
+        IComputadoraDAO computadoraDAO = new ComputadoraDAO(conexionBD);
+        IAlumnoDAO alumnoDAO = new AlumnoDAO(conexionBD);
+        this.alumnoNegocio = new AlumnoNegocio(new AlumnoDAO(conexionBD));
+        cargarTabla("", paginaActual);
+        actualizarContadorBloqueados();
+
+    }
+
+    private void cargarTabla(String criterio, int pagina) {
+        try {
+            // 1. Obtener los datos desde el negocio
+            List<AlumnoBloqueadoTablaDTO> lista = alumnoNegocio.obtenerAlumnosBloqueadosPaginados(criterio, pagina, 10);
+
+            // 2. Obtener el modelo de la tabla
+            DefaultTableModel model = (DefaultTableModel) tabladesbloqueos.getModel();
+            model.setRowCount(0); // Limpiar filas previas
+
+            // 3. Llenar el modelo con los datos
+            for (AlumnoBloqueadoTablaDTO alumno : lista) {
+                Object[] row = {
+                    alumno.getIdAlumno(),
+                    alumno.getNombre(),
+                    alumno.getFechaBloqueo(),
+                    alumno.getMotivo()
+                };
+                model.addRow(row);
+            }
+            actualizarContadorBloqueados();
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los bloqueos: " + e.getMessage());
+        }
+    }
+
+    public void actualizarContadorBloqueados() {
+        try {
+            String criterio = txtbuscadoralumno.getText().trim();
+            // Llamamos al método recién creado en la capa de negocio
+            int total = this.alumnoNegocio.obtenerTotalBloqueados(this.idLaboratorioActual, criterio);
+
+            lblnumerodebloqueos.setText(String.valueOf(total));
+        } catch (NegocioException e) {
+            System.err.println("Error al actualizar el contador: " + e.getMessage());
+        }
     }
 
     /**
@@ -82,6 +147,11 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
         btnequipos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnequipos.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnequipos.setInheritsPopupMenu(true);
+        btnequipos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnequiposActionPerformed(evt);
+            }
+        });
 
         btnbloqueos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnbloqueos.setForeground(new java.awt.Color(102, 102, 102));
@@ -93,6 +163,11 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
         btnbloqueos.setMaximumSize(new java.awt.Dimension(46, 14));
         btnbloqueos.setMinimumSize(new java.awt.Dimension(46, 14));
         btnbloqueos.setPreferredSize(new java.awt.Dimension(46, 14));
+        btnbloqueos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbloqueosActionPerformed(evt);
+            }
+        });
 
         lbldesbloqueos.setBackground(new java.awt.Color(226, 226, 226));
         lbldesbloqueos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -264,9 +339,19 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
         txtbuscadoralumno.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         txtbuscadoralumno.setText("jTextField1");
         txtbuscadoralumno.setPreferredSize(new java.awt.Dimension(73, 15));
+        txtbuscadoralumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtbuscadoralumnoActionPerformed(evt);
+            }
+        });
 
         btnfltrar.setText("Fltrar");
         btnfltrar.setPreferredSize(new java.awt.Dimension(73, 15));
+        btnfltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnfltrarActionPerformed(evt);
+            }
+        });
 
         btnrestaurartabla.setBackground(new java.awt.Color(0, 86, 150));
         btnrestaurartabla.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -443,15 +528,15 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
                             .addComponent(lblbuscaralumno, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contenedordecontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxsanciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtbuscadoralumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnfltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbxsanciones, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtbuscadoralumno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnfltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnrestaurartabla, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(contenedordecontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(contenedordecontenidoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contenedordecontenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblpaginas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -506,11 +591,79 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
 
     private void btnrestaurartablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrestaurartablaActionPerformed
         // TODO add your handling code here:
+        txtbuscadoralumno.setText(""); // Limpiamos el buscador
+        paginaActual = 1;
+        cargarTabla("", paginaActual); // Recargamos sin filtro
     }//GEN-LAST:event_btnrestaurartablaActionPerformed
 
     private void btnaplicardesbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaplicardesbloqueoActionPerformed
         // TODO add your handling code here:
+        String idTexto = txtidalumno.getText().trim();
+
+        if (idTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID de alumno válido.");
+            return;
+        }
+
+        try {
+            int idAlumno = Integer.parseInt(idTexto);
+
+            // 2. Crear la ventana de confirmación
+            Confirmacion_Debloqueo_alumno panelConfirmacion = new Confirmacion_Debloqueo_alumno(this.alumnoNegocio, idAlumno);
+
+            // 3. Crear y configurar el JDialog
+            JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Confirmar Desbloqueo", true);
+            dialog.add(panelConfirmacion);
+            dialog.pack();
+            dialog.setLocationRelativeTo(this);
+
+            dialog.setVisible(true);
+
+            // 5. Refrescar la tabla después de cerrar el diálogo (por si se realizó el cambio)
+            cargarTabla("", paginaActual);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID del alumno debe ser numérico.");
+        }
+
     }//GEN-LAST:event_btnaplicardesbloqueoActionPerformed
+
+    private void btnequiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnequiposActionPerformed
+        // TODO add your handling code here:
+        Administrador_Equipos ventanaEquipos = new Administrador_Equipos();
+
+        ventanaEquipos.setVisible(true);
+
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (win != null) {
+            win.dispose();
+        }
+    }//GEN-LAST:event_btnequiposActionPerformed
+
+    private void btnbloqueosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueosActionPerformed
+        javax.swing.JFrame framePrincipal = (javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        Administrador_Bloqueos panel = new Administrador_Bloqueos(this.nombreLaboratorio);
+        panel.setSize(framePrincipal.getSize()); 
+
+        framePrincipal.getContentPane().removeAll();
+        framePrincipal.getContentPane().add(panel);
+        framePrincipal.revalidate();
+        framePrincipal.repaint();
+
+    }//GEN-LAST:event_btnbloqueosActionPerformed
+
+    private void btnfltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfltrarActionPerformed
+        // TODO add your handling code here:
+        String criterio = txtbuscadoralumno.getText();
+        paginaActual = 1; // Reiniciamos a la primera página
+        cargarTabla(criterio, paginaActual);
+    }//GEN-LAST:event_btnfltrarActionPerformed
+
+    private void txtbuscadoralumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscadoralumnoActionPerformed
+        // TODO add your handling code here:
+        btnfltrarActionPerformed(evt);
+    }//GEN-LAST:event_txtbuscadoralumnoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

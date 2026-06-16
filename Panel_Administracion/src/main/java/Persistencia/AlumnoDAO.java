@@ -5,6 +5,7 @@
 package Persistencia;
 
 import dtos.AlumnoBloqueadoTablaDTO;
+import dtos.AlumnoDTO;
 import dtos.BloqueoAlumnoDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -147,6 +148,33 @@ public class AlumnoDAO implements IAlumnoDAO {
             throw new PersistenciaException("Error al verificar existencia del alumno: " + e.getMessage());
         }
         return false;
+    }
+
+    @Override
+    public boolean eliminarBloqueoAlumno(int idAlumno) throws PersistenciaException {
+        String sql = "DELETE FROM Bloqueo WHERE id_alumno = ?";
+        try (Connection conn = this.conexion.crearConexion(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idAlumno);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al eliminar el bloqueo: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public AlumnoDTO obtenerAlumnoPorId(int idAlumno) throws PersistenciaException {
+        String sql = "SELECT id, nombre FROM Alumno WHERE id = ?";
+        try (Connection conn = this.conexion.crearConexion(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idAlumno);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new AlumnoDTO(rs.getInt("id"), rs.getString("nombre"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al buscar alumno: " + e.getMessage());
+        }
+        return null;
     }
 
 }

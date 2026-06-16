@@ -5,6 +5,7 @@
 package Negocio;
 
 import dtos.AlumnoBloqueadoTablaDTO;
+import dtos.AlumnoDTO;
 import dtos.BloqueoAlumnoDTO;
 import java.util.List;
 
@@ -47,5 +48,10 @@ public interface IAlumnoNegocio {
      * @throws NegocioException Si hay error en el cálculo.
      */
     int calcularTotalPaginas(int idLaboratorio, String criterio, int registrosPorPagina) throws NegocioException;
+
     int obtenerTotalBloqueados(int idLaboratorio, String criterio) throws NegocioException;
+
+    void eliminarBloqueo(int idAlumno) throws NegocioException;
+
+    AlumnoDTO obtenerAlumnoPorId(int idAlumno) throws NegocioException;
 }

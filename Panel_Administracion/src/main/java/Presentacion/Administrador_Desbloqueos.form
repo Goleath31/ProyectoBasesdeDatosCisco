@@ -125,6 +125,9 @@
                     <Property name="horizontalTextPosition" type="int" value="2"/>
                     <Property name="inheritsPopupMenu" type="boolean" value="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnequiposActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnbloqueos">
                   <Properties>
@@ -151,6 +154,9 @@
                       <Dimension value="[46, 14]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnbloqueosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lbldesbloqueos">
                   <Properties>
@@ -464,9 +470,9 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="cbxsanciones" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtbuscadoralumno" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnfltrar" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
+                                      <Component id="cbxsanciones" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                                      <Component id="txtbuscadoralumno" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="btnfltrar" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Component id="btnrestaurartabla" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
@@ -475,7 +481,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jPanel9" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jScrollPane1" pref="289" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" pref="279" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="lblpaginas" alignment="0" max="32767" attributes="0"/>
@@ -553,6 +559,9 @@
                       <Dimension value="[73, 15]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtbuscadoralumnoActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnfltrar">
                   <Properties>
@@ -561,6 +570,9 @@
                       <Dimension value="[73, 15]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnfltrarActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnrestaurartabla">
                   <Properties>
