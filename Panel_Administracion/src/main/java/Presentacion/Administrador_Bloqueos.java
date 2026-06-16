@@ -693,11 +693,8 @@ public class Administrador_Bloqueos extends javax.swing.JPanel {
 
         Administrador_Equipos ventanaEquipos = new Administrador_Equipos();
 
-        // 2. Hacer visible la nueva ventana
         ventanaEquipos.setVisible(true);
 
-        // 3. Opcional: Cerrar la ventana actual si es un JFrame
-        // Si Administrador_Bloqueos vive dentro de un JFrame, puedes obtenerlo así:
         java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (win != null) {
             win.dispose(); // Esto cierra la ventana donde está contenido este JPanel

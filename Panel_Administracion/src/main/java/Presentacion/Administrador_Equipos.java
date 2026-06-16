@@ -273,6 +273,11 @@ public class Administrador_Equipos extends javax.swing.JFrame {
         BtnDesbloqueos.setMaximumSize(new java.awt.Dimension(46, 14));
         BtnDesbloqueos.setMinimumSize(new java.awt.Dimension(46, 14));
         BtnDesbloqueos.setPreferredSize(new java.awt.Dimension(46, 14));
+        BtnDesbloqueos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnDesbloqueosActionPerformed(evt);
+            }
+        });
 
         lblEquipos.setBackground(new java.awt.Color(226, 226, 226));
         lblEquipos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -848,6 +853,23 @@ public class Administrador_Equipos extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnBloqueosActionPerformed
+
+    private void BtnDesbloqueosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDesbloqueosActionPerformed
+        // TODO add your handling code here:
+        String nombreLab = this.lbllaboratorionombre.getText();
+        Administrador_Desbloqueos panelDesbloqueos = new Administrador_Desbloqueos(nombreLab);
+
+        javax.swing.JFrame frame = new javax.swing.JFrame("Administración de Desbloqueos");
+
+        frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+        frame.add(panelDesbloqueos);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BtnDesbloqueosActionPerformed
 
     /**
      * @param args the command line arguments

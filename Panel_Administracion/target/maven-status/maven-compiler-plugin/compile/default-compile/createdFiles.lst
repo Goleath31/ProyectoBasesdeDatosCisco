@@ -24,6 +24,7 @@ Presentacion\Administrador_Bloqueos$5.class
 Presentacion\Confirmacion_Desbloqueo_Equipo$3.class
 Negocio\ComputadoraNegocio.class
 Persistencia\IAlumnoDAO.class
+Presentacion\Administrador_Equipos$13.class
 Presentacion\Administrador_Bloqueos$8.class
 Entidad\SoftwareInstaladoId.class
 Presentacion\Administrador_Equipos$2.class

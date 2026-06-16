@@ -10,11 +10,17 @@ package Presentacion;
  */
 public class Administrador_Desbloqueos extends javax.swing.JPanel {
 
+    private String nombreLaboratorio;
+
     /**
      * Creates new form Administrador_Desbloqueos
      */
-    public Administrador_Desbloqueos() {
+    public Administrador_Desbloqueos(String nombreLab) {
         initComponents();
+        if (lbllaboratorio != null) {
+            lbllaboratorio.setText(nombreLab);
+        }
+        nombreLaboratorio = nombreLab;
     }
 
     /**
@@ -189,7 +195,7 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
                     .addGroup(panelsuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRegresar)
-                        .addComponent(lbllaboratorio))
+                        .addComponent(lbllaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelsuperiorLayout.createSequentialGroup()
                         .addComponent(lblusuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -206,7 +212,7 @@ public class Administrador_Desbloqueos extends javax.swing.JPanel {
         lblbloqueospendientes.setBackground(new java.awt.Color(226, 226, 226));
         lblbloqueospendientes.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
         lblbloqueospendientes.setForeground(new java.awt.Color(93, 95, 95));
-        lblbloqueospendientes.setText("BLOQUEOS PENDIENTES");
+        lblbloqueospendientes.setText("DESLOQUEOS PENDIENTES");
 
         lblnumerodebloqueos.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblnumerodebloqueos.setForeground(new java.awt.Color(0, 86, 150));
